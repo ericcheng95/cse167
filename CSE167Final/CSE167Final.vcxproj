@@ -74,6 +74,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <AdditionalDependencies>opengl32.lib;glu32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -93,6 +94,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -117,12 +119,25 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Geode.cpp" />
     <ClCompile Include="..\main.cpp" />
-    <ClCompile Include="..\Window.cpp" />
+    <ClCompile Include="..\Model.cpp" />
+    <ClCompile Include="..\PrimaryWindow.cpp" />
+    <ClCompile Include="..\SecondaryWindow.cpp" />
+    <ClCompile Include="..\shader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Cone.h" />
+    <ClInclude Include="..\Cube.h" />
+    <ClInclude Include="..\Cylinder.h" />
+    <ClInclude Include="..\Geode.h" />
     <ClInclude Include="..\main.h" />
-    <ClInclude Include="..\Window.h" />
+    <ClInclude Include="..\Material.h" />
+    <ClInclude Include="..\Model.h" />
+    <ClInclude Include="..\PrimaryWindow.h" />
+    <ClInclude Include="..\Pyramid.h" />
+    <ClInclude Include="..\SecondaryWindow.h" />
+    <ClInclude Include="..\shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

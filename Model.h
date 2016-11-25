@@ -2,6 +2,7 @@
 #include "main.h"
 #include "Material.h"
 
+using namespace std;
 
 class Model
 {

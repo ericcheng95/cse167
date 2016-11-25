@@ -5,7 +5,10 @@
 int main(void)
 {
 	chrono::time_point<chrono::system_clock> time_point = chrono::system_clock::now();
-	double frames = 0;
+	long frames = 0;
+	
+	PrimaryWindow::init(640, 480, "Primary Window");
+	
 	while (!glfwWindowShouldClose(PrimaryWindow::window))
 	{
 	
@@ -14,8 +17,8 @@ int main(void)
 
 		frames++;
 		long long t = chrono::duration_cast<chrono::nanoseconds>(chrono::system_clock::now() - time_point).count();
-		if (t > 1000000000.0) {
-			cout << "FPS: " << frames / t << endl;
+		if (t > 1000000000) {
+			cout <<"FPS: " << frames * 1000000000.0 / t << endl;
 			frames = 0;
 			time_point = chrono::system_clock::now();
 		}

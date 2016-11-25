@@ -3,15 +3,15 @@
 void Geode::draw(mat4 C, unsigned int shaderProgram)
 {
 	mat4 CM = C * M;
-
-	glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, &CM[0][0]);
-	glUniform3fv(glGetUniformLocation(shaderProgram, "material.diffuseCoeff"), 1, &material->diffuseCoeff[0]);
-	glUniform3fv(glGetUniformLocation(shaderProgram, "material.specularCoeff"), 1, &material->specularCoeff[0]);
-	glUniform3fv(glGetUniformLocation(shaderProgram, "material.ambientCoeff"), 1, &material->ambientCoeff[0]);
-	glUniform1f(glGetUniformLocation(shaderProgram, "material.shininessExp"), material->shininessExp);
-	glUniform1f(glGetUniformLocation(shaderProgram, "material.reflectivity"), material->reflectivity);
-
-	model->draw();
+	if (model != nullptr) {
+		glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, &CM[0][0]);
+		glUniform3fv(glGetUniformLocation(shaderProgram, "material.diffuseCoeff"), 1, &material->diffuseCoeff[0]);
+		glUniform3fv(glGetUniformLocation(shaderProgram, "material.specularCoeff"), 1, &material->specularCoeff[0]);
+		glUniform3fv(glGetUniformLocation(shaderProgram, "material.ambientCoeff"), 1, &material->ambientCoeff[0]);
+		glUniform1f(glGetUniformLocation(shaderProgram, "material.shininessExp"), material->shininessExp);
+		glUniform1f(glGetUniformLocation(shaderProgram, "material.reflectivity"), material->reflectivity);
+		model->draw();
+	}
 
 	for (auto it = children.begin(); it != children.end(); it++)
 	{

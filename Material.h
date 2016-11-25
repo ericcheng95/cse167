@@ -1,5 +1,6 @@
 #pragma once
 #include "main.h"
+using namespace glm;
 
 struct Material
 {
