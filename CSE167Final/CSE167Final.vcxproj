@@ -116,13 +116,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="..\Release\selectionBuffer.frag" />
-    <None Include="..\Release\selectionBuffer.vert" />
-    <None Include="..\Release\shader.frag" />
-    <None Include="..\Release\shader.vert" />
-    <None Include="..\Release\skyboxShader.frag" />
-    <None Include="..\Release\skyboxShader.vert" />
     <None Include="packages.config" />
+    <None Include="selectionBuffer.frag" />
+    <None Include="selectionBuffer.vert" />
+    <None Include="shader.frag" />
+    <None Include="shader.vert" />
+    <None Include="skyboxShader.frag" />
+    <None Include="skyboxShader.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Geode.cpp" />
