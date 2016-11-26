@@ -17,6 +17,9 @@ public:
 	static unsigned int shader;
 	static unsigned int selectionShader;
 
+	static vec3 cam_pos, cam_look_at, cam_up, cam_right;
+
+
 	static void init(int width, int height, char* title);
 	static void display_callback();
 	static void resize_callback(GLFWwindow* window, int width, int height);

@@ -16,6 +16,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="..\Release\selectionBuffer.frag" />
+    <None Include="..\Release\selectionBuffer.vert" />
+    <None Include="..\Release\shader.frag" />
+    <None Include="..\Release\shader.vert" />
+    <None Include="..\Release\skyboxShader.frag" />
+    <None Include="..\Release\skyboxShader.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\main.cpp">
@@ -37,6 +43,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\Sphere.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Light.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -75,6 +84,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Sphere.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
