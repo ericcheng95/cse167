@@ -1,6 +1,10 @@
 #ifndef _pWINDOW_H_
 #define _pWINDOW_H_
-#include "main.h"
+#include "Geode.h"
+#include "Sphere.h"
+#include "Cube.h"
+#include "Cylinder.h"
+#include "Pyramid.h"
 
 class PrimaryWindow
 {

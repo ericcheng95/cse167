@@ -1,6 +1,6 @@
 #ifndef _sWINDOW_H_
 #define _sWINDOW_H_
-#include "main.h"
+#include "Geode.h"
 
 class SecondaryWindow
 {

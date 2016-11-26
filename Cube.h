@@ -5,11 +5,11 @@ class Cube :
 	public Geode
 {
 public:
-	Cube(unsigned int shader) : Geode(new Model("cube.obj"), shader)
+	Cube() : Geode(new Model("cube.obj"))
 	{
 	};
 
-	Cube(unsigned int shader, Material* mat) : Geode(new Model("cube.obj"), shader, mat)
+	Cube(Material* mat) : Geode(new Model("cube.obj"), mat)
 	{
 	};
 };

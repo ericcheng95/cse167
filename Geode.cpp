@@ -1,4 +1,16 @@
 #include "Geode.h"
+const vec3 Geode::xAxis = vec3(1, 0, 0);
+const vec3 Geode::yAxis = vec3(0, 1, 0);
+const vec3 Geode::zAxis = vec3(0, 0, 1);
+Material* Geode::defaultMaterial = new Material{
+	vec3(1.0f, 1.0f, 1.0f),
+	10,
+	vec3(1.0f, 1.0f, 1.0f),
+	vec3(0.2f, 0.2f, 0.2f),
+	0.0f };
+
+int Geode::geodeCounter = 1;
+Geode* Geode::scene = new Geode();
 
 void Geode::draw(mat4 C, unsigned int shaderProgram)
 {
@@ -55,6 +67,16 @@ void Geode::reset()
 void Geode::set(mat4 m)
 {
 	M = m;
+}
+
+void Geode::add(Geode* geode)
+{
+	children.push_back(geode);
+}
+
+void Geode::remove(Geode* geode)
+{
+	children.remove(geode);
 }
 
 void Geode::translate(float x, float y, float z)

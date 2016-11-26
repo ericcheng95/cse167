@@ -3,7 +3,7 @@
 
 class Pyramid : public Geode {
 public:
-	Pyramid(unsigned int shader) : Geode(new Model("pyramid.obj"), shader) {};
-	Pyramid(unsigned int shader, Material* mat) : Geode(new Model("pyramid.obj"), shader, mat) {};
+	Pyramid() : Geode(new Model("pyramid.obj")) {};
+	Pyramid(Material* mat) : Geode(new Model("pyramid.obj"), mat) {};
 };
 

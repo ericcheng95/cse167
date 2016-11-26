@@ -1,22 +1,30 @@
 #pragma once
 #include "main.h"
 
+#include "shader.h"
+#include "Material.h"
+#include "Model.h"
 
-const vec3 xAxis = vec3(1, 0, 0);
-const vec3 yAxis = vec3(0, 1, 0);
-const vec3 zAxis = vec3(0, 0, 1);
-Material* defaultMaterial = new Material{ vec3(1.0f, 1.0f, 1.0f), 10, vec3(1.0f, 1.0f, 1.0f), vec3(0.2f, 0.2f, 0.2f), 0.0f };
 
-int geodeCounter = 1;
+
 class Geode
 {
 public:
+	static const vec3 xAxis;
+	static const vec3 yAxis;
+	static const vec3 zAxis;
+	static Material* defaultMaterial;
+	static int geodeCounter;
+
+	static Geode* scene;
+
+
 	int id;
 	Model* model;
 	Material* material;
 	list<Geode*> children;
 	mat4 M;
-	
+
 	Geode();
 	Geode(Material* mat);
 	Geode(Model* m);
@@ -32,7 +40,6 @@ public:
 	void rotate(mat4 R);
 	void reset();
 	void set(mat4 m);
-
-
+	void add(Geode* geode);
+	void remove(Geode* geode);
 };
-

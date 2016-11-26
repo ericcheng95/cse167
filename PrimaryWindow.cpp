@@ -1,5 +1,6 @@
 #include "PrimaryWindow.h"
 
+
 GLFWwindow* PrimaryWindow::window;
 int PrimaryWindow::width;
 int PrimaryWindow::height;
@@ -71,6 +72,12 @@ void PrimaryWindow::init(int width, int height, char* title)
 
 	shader = LoadShaders("shader.vert", "shader.frag");
 
+
+
+	//Initialize objects
+	Geode::scene->add(new Sphere());
+
+
 	resize_callback(window, width, height);
 }
 
@@ -78,7 +85,7 @@ void PrimaryWindow::display_callback()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
+	Geode::scene->draw(mat4(1.0f), shader);
 
 	glfwSwapBuffers(window);
 	glfwPollEvents();
