@@ -132,6 +132,7 @@
     <ClCompile Include="..\PrimaryWindow.cpp" />
     <ClCompile Include="..\SecondaryWindow.cpp" />
     <ClCompile Include="..\shader.cpp" />
+    <ClCompile Include="..\skybox.cpp" />
     <ClCompile Include="..\Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -139,6 +140,7 @@
     <ClInclude Include="..\Cube.h" />
     <ClInclude Include="..\Cylinder.h" />
     <ClInclude Include="..\Geode.h" />
+    <ClInclude Include="..\image.h" />
     <ClInclude Include="..\Light.h" />
     <ClInclude Include="..\main.h" />
     <ClInclude Include="..\Material.h" />
@@ -147,7 +149,9 @@
     <ClInclude Include="..\Pyramid.h" />
     <ClInclude Include="..\SecondaryWindow.h" />
     <ClInclude Include="..\shader.h" />
+    <ClInclude Include="..\skybox.h" />
     <ClInclude Include="..\Sphere.h" />
+    <ClInclude Include="..\texture.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
