@@ -60,7 +60,7 @@ void main()
 	vec3 normal = normalize(Normal);
 	vec3 viewDir = normalize(cameraPos - FragPos);
 	vec4 skyboxEnvironmentColor = texture(skybox, reflect(-1.0f * viewDir, normal));
-	color = vec4(0.0f);
+	color =  material.reflectivity * skyboxEnvironmentColor;
 	for (int i = 0; i < DIR_LIGHT_COUNT; i++){
 		DirectionalLight directionalLight = directionalLights[i];
 		vec3 lightDir = normalize(-directionalLight.direction);
@@ -68,7 +68,7 @@ void main()
 		vec3 diffuse = directionalLight.diffuse * max(dot(normal, lightDir), 0.0f) * material.diffuseCoeff;
 		vec3 halfway = normalize(viewDir + lightDir);
 		vec3 specular = directionalLight.specular * pow(max(dot(halfway, normal), 0.0f), material.shininessExp);
-		color += vec4(ambient + diffuse + specular, 1.0f) + material.reflectivity * skyboxEnvironmentColor;
+		color += vec4(ambient + diffuse + specular, 1.0f);
 	}
 	for (int i = 0; i < POINT_LIGHT_COUNT; i++){
 		PointLight pointLight = pointLights[i];
@@ -80,7 +80,7 @@ void main()
 		vec3 halfway = normalize(viewDir + lightDir);
 		vec3 specular = pointLight.specular * pow(max(dot(halfway, normal), 0.0f), material.shininessExp);
 		float distance = length(lightVector);
-		color += vec4((ambient + diffuse + specular) / (pointLight.attenuation * distance * distance), 1.0f) + material.reflectivity * skyboxEnvironmentColor;
+		color += vec4((ambient + diffuse + specular) / (pointLight.attenuation * distance * distance), 1.0f);
 	}
 	for (int i = 0; i < POINT_LIGHT_COUNT; i++){
 		SpotLight spotLight = spotLights[i];
@@ -93,7 +93,7 @@ void main()
 				vec3 halfway = normalize(viewDir + lightDir);
 				vec3 specular = spotLight.specular * pow(max(dot(halfway, normal), 0.0f), material.shininessExp);
 				float distance = length(lightVector);
-				color += vec4((ambient + diffuse + specular) / (spotLight.attenuation * distance * distance) * pow(falloff, spotLight.spotExponent), 1.0f) + material.reflectivity * skyboxEnvironmentColor;
+				color += vec4((ambient + diffuse + specular) / (spotLight.attenuation * distance * distance) * pow(falloff, spotLight.spotExponent), 1.0f);
 		}
 	}
 }
