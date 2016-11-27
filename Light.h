@@ -34,8 +34,10 @@ struct SpotLight
 class Light
 {
 public:
-	static DirectionalLight l;
-
+	static vector<DirectionalLight> directionalLights;
+	static vector<PointLight> pointLights;
+	static vector<SpotLight> spotLights;
+	static void drawLights(unsigned int shader);
 
 };
 

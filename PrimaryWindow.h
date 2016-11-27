@@ -5,6 +5,7 @@
 #include "Cube.h"
 #include "Cylinder.h"
 #include "Pyramid.h"
+#include "skybox.h"
 
 class PrimaryWindow
 {
@@ -18,6 +19,8 @@ public:
 	static unsigned int selectionShader;
 
 	static vec3 cam_pos, cam_look_at, cam_up, cam_right;
+
+	static Skybox* skybox;
 
 
 	static void init(int width, int height, char* title);

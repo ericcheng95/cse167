@@ -15,6 +15,8 @@ bool PrimaryWindow::leftPress;
 bool PrimaryWindow::rightPress;
 double PrimaryWindow::translateScale;
 
+Skybox* PrimaryWindow::skybox;
+
 
 vec3 PrimaryWindow::cam_pos(0.0f, 0.0f, 20.0f); // e  | Position of camera
 vec3 PrimaryWindow::cam_look_at(0.0f, 0.0f, 0.0f); // d  | This is where the camera looks at
@@ -80,7 +82,13 @@ void PrimaryWindow::init(int width, int height, char* title)
 
 	shader = LoadShaders("shader.vert", "shader.frag");
 
+	skybox = new Skybox(width, height);
 
+
+	//Initialize lights
+	Light::directionalLights.push_back({ vec3(0, -1, -1), vec3(0.75, 0.75, 0.75), vec3(0.75, 0.75, 0.75), vec3(0.75, 0.75, 0.75) });
+//	Light::pointLights.push_back({ vec3(0, 12, 0), vec3(1, 1, 1), vec3(1, 1, 1), vec3(1, 1, 1), 0.02f });
+//	Light::spotLights.push_back({ vec3(0, -1, 0), vec3(0, 12, 0), vec3(1, 1, 1), vec3(1, 1, 1), vec3(1, 1, 1), 0.02f, 3.1415f / 72.0f ,64 });
 
 	//Initialize objects
 	Geode::scene->add(new Sphere());
@@ -93,33 +101,15 @@ void PrimaryWindow::display_callback()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	skybox->draw(V);
+
 	glUseProgram(shader);
 
 	glUniformMatrix4fv(glGetUniformLocation(shader, "projection"), 1, GL_FALSE, &P[0][0]);
 	glUniformMatrix4fv(glGetUniformLocation(shader, "view"), 1, GL_FALSE, &V[0][0]);
 	glUniform3fv(glGetUniformLocation(shader, "cameraPos"), 1, &cam_pos[0]);
 
-	glUniform3fv(glGetUniformLocation(shader, "directionalLight.direction"), 1, &Light::l.direction[0]);
-	glUniform3fv(glGetUniformLocation(shader, "directionalLight.ambient"), 1, &Light::l.ambient[0]);
-	glUniform3fv(glGetUniformLocation(shader, "directionalLight.diffuse"), 1, &Light::l.diffuse[0]);
-	glUniform3fv(glGetUniformLocation(shader, "directionalLight.specular"), 1, &Light::l.specular[0]);
-
-//	glUniform3fv(glGetUniformLocation(shader, "pointLight.position"), 1, &Window::pointLight.position[0]);
-//	glUniform3fv(glGetUniformLocation(shader, "pointLight.ambient"), 1, &Window::pointLight.ambient[0]);
-//	glUniform3fv(glGetUniformLocation(shader, "pointLight.diffuse"), 1, &Window::pointLight.diffuse[0]);
-//	glUniform3fv(glGetUniformLocation(shader, "pointLight.specular"), 1, &Window::pointLight.specular[0]);
-//	glUniform1f(glGetUniformLocation(shader, "pointLight.attenuation"), Window::pointLight.attenuation);
-//
-//
-//	glUniform3fv(glGetUniformLocation(shader, "spotLight.direction"), 1, &Window::spotLight.direction[0]);
-//	glUniform3fv(glGetUniformLocation(shader, "spotLight.position"), 1, &Window::spotLight.position[0]);
-//	glUniform3fv(glGetUniformLocation(shader, "spotLight.ambient"), 1, &Window::spotLight.ambient[0]);
-//	glUniform3fv(glGetUniformLocation(shader, "spotLight.diffuse"), 1, &Window::spotLight.diffuse[0]);
-//	glUniform3fv(glGetUniformLocation(shader, "spotLight.specular"), 1, &Window::spotLight.specular[0]);
-//	glUniform1f(glGetUniformLocation(shader, "spotLight.attenuation"), Window::spotLight.attenuation);
-//	glUniform1f(glGetUniformLocation(shader, "spotLight.spotCutoff"), Window::spotLight.spotCutoff);
-//	glUniform1f(glGetUniformLocation(shader, "spotLight.spotExponent"), Window::spotLight.spotExponent);
-
+	Light::drawLights(shader);
 
 	Geode::scene->draw(mat4(1.0f), shader);
 
@@ -131,6 +121,8 @@ void PrimaryWindow::resize_callback(GLFWwindow* window, int width, int height)
 {
 	PrimaryWindow::width = width;
 	PrimaryWindow::height = height;
+
+	skybox->updatePerspective(width, height);
 
 	translateScale = 22.1 / height;
 	glViewport(0, 0, width, height);

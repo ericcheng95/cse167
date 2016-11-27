@@ -1,6 +1,5 @@
 #pragma once
 #include "main.h"
-
 #include "shader.h"
 #include "Material.h"
 #include "Model.h"
@@ -17,7 +16,7 @@ public:
 	static int geodeCounter;
 
 	static Geode* scene;
-
+	
 
 	int id;
 	Model* model;
