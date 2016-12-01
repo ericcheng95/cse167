@@ -1,5 +1,6 @@
 #pragma once
 #include "Material.h"
+#include "texture.h"
 
 using namespace std;
 
@@ -11,16 +12,19 @@ public:
 	int g_PolygonMode = GL_FILL; //point, line , fill
 	int g_PolygonFace = GL_FRONT_AND_BACK; //front, back, front and back
 	int g_BufferUsage = GL_STATIC_DRAW;
+	Texture* texture;
 
 	void draw();
 	void updateData(vector<GLfloat>& vertices);
 	void updateData(vector<GLfloat>& vertices, vector<GLfloat>& normals);
 	Model(vector<GLfloat>& vertices, vector<GLfloat>& normals, vector<GLuint>& faceVertexIndices);
 	Model(char* filepath);
+	Model(char* filepath, Texture* texture);
 	~Model();
 
 private:
-	unsigned int VBO, VBON, VAO, EBO;
+	unsigned int VBO, VBON, VAO, EBO, VBOT;
 	int count;
+	bool hasTextureCoords = false;
 
 };

@@ -49,9 +49,11 @@ uniform SpotLight spotLights[SPOT_LIGHT_COUNT+1];
 in vec3 FragPos;
 in vec3 Normal;
 in vec3 RawNormal;
+in vec2 TexCoord;
 
 uniform vec3 cameraPos;
 uniform samplerCube skybox;
+uniform sampler2D texture;
 
 out vec4 color;
 
@@ -60,7 +62,7 @@ void main()
 	vec3 normal = normalize(Normal);
 	vec3 viewDir = normalize(cameraPos - FragPos);
 	vec4 skyboxEnvironmentColor = texture(skybox, reflect(-1.0f * viewDir, normal));
-	color =  material.reflectivity * skyboxEnvironmentColor;
+	color = texture(texture, TexCoord) + material.reflectivity * skyboxEnvironmentColor;
 	for (int i = 0; i < DIR_LIGHT_COUNT; i++){
 		DirectionalLight directionalLight = directionalLights[i];
 		vec3 lightDir = normalize(-directionalLight.direction);

@@ -1,9 +1,5 @@
 #include "skybox.h"
 
-
-
-
-
 Skybox::Skybox(int width, int height)
 {
 	skyboxShader = LoadShaders("skyboxShader.vert", "skyboxShader.frag");
@@ -84,6 +80,7 @@ void Skybox::draw(mat4 view)
 	
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
+
 	glBindVertexArray(0);
 	glDepthMask(GL_TRUE);
 }
