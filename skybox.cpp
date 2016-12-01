@@ -6,7 +6,7 @@ Skybox::Skybox(int width, int height)
 
 	updatePerspective(width, height);
 
-	texture = new Texture(GL_TEXTURE_CUBE_MAP, "");
+	texture = new Texture(GL_TEXTURE_CUBE_MAP, "Image");
 	GLfloat skyboxVertices[] = {
 		// Positions          
 		-300001.0f, 300001.0f, -300001.0f,

@@ -58,12 +58,17 @@ private:
 		glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
 
 		char faces[6][50];
-		char* names[6] = { "right.bmp", "left.bmp", "top.bmp", "bottom.bmp", "back.bmp", "front.bmp" };
+		//char* names[6] = { "right", "left", "top", "bottom", "back", "front" };
+		char* names[6] = { "right", "left", "down", "up", "back", "front" };
 		for (int i = 0;  i < 6; i++)
 		{
-			strcpy(faces[i], namePrefix);
-			strcat(faces[i], names[i]);
+//			strcpy(faces[i], namePrefix);
+//			strcat(faces[i], names[i]);
+			strcpy(faces[i], names[i]);
+			strcat(faces[i], namePrefix);
+			strcat(faces[i], ".bmp");
 		}
+		cout << faces[0] << endl;
 		for (GLuint i = 0; i < 6; i++)
 		{
 			Image image(faces[i]);

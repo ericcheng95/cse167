@@ -13,21 +13,12 @@ public:
 	static GLFWwindow* window;
 	static int width;
 	static int height;
-	static mat4 P;
-	static mat4 V;
 	static unsigned int shader;
 	static unsigned int selectionShader;
 
-	static vec3 cam_pos, cam_look_at, cam_up, cam_right;
-	static vec3 cameraFrustumNormalLeft, cameraFrustumNormalRight, cameraFrustumNormalTop, cameraFrustumNormalBottom, cameraFrustumNormalNear, cameraFrustumNormalFar;
-	static vec3 cameraFrustumPointLeft, cameraFrustumPointRight, cameraFrustumPointTop, cameraFrustumPointBottom, cameraFrustumPointNear, cameraFrustumPointFar;
-	static void updateV();
 	static bool enableCulling;
 
-	static int uProjection, uView, uCamera;
-
 	static Skybox* skybox;
-
 
 	static void init(int width, int height, char* title);
 	static void display_callback();
@@ -38,8 +29,6 @@ public:
 	static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
-	static vec3 trackballMap(double x, double y);
-	static mat4 trackballRotate(vec3 from, vec3 to);
 	
 private:
 	static double curX;

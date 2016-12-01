@@ -1,5 +1,6 @@
 #include "Geode.h"
 #include "PrimaryWindow.h"
+#include "camera.h"
 const vec3 Geode::xAxis = vec3(1, 0, 0);
 const vec3 Geode::yAxis = vec3(0, 1, 0);
 const vec3 Geode::zAxis = vec3(0, 0, 1);
@@ -15,19 +16,18 @@ Geode* Geode::scene = new Geode();
 
 int Geode::uModel, Geode::uDiffuse, Geode::uSpecular, Geode::uAmbient, Geode::uShininess, Geode::uReflectivity;
 
-
 void Geode::draw(mat4 C, unsigned int shaderProgram)
 {
 	mat4 CM = C * M;
 	// Cull if out of bounds
 	if (PrimaryWindow::enableCulling && enableCulling) {
 		vec3 v = vec3(CM * center);
-		if (dot((v - PrimaryWindow::cameraFrustumPointLeft), PrimaryWindow::cameraFrustumNormalLeft) > boundingRadius
-			|| dot((v - PrimaryWindow::cameraFrustumPointRight), PrimaryWindow::cameraFrustumNormalRight) > boundingRadius
-			|| dot((v - PrimaryWindow::cameraFrustumPointTop), PrimaryWindow::cameraFrustumNormalTop) > boundingRadius
-			|| dot((v - PrimaryWindow::cameraFrustumPointBottom), PrimaryWindow::cameraFrustumNormalBottom) > boundingRadius
-			|| dot((v - PrimaryWindow::cameraFrustumPointNear), PrimaryWindow::cameraFrustumNormalNear) > boundingRadius
-			|| dot((v - PrimaryWindow::cameraFrustumPointFar), PrimaryWindow::cameraFrustumNormalFar) > boundingRadius)
+		if (dot((v - Camera::cameraFrustumPointLeft), Camera::cameraFrustumNormalLeft) > boundingRadius
+			|| dot((v - Camera::cameraFrustumPointRight), Camera::cameraFrustumNormalRight) > boundingRadius
+			|| dot((v - Camera::cameraFrustumPointTop), Camera::cameraFrustumNormalTop) > boundingRadius
+			|| dot((v - Camera::cameraFrustumPointBottom), Camera::cameraFrustumNormalBottom) > boundingRadius
+			|| dot((v - Camera::cameraFrustumPointNear), Camera::cameraFrustumNormalNear) > boundingRadius
+			|| dot((v - Camera::cameraFrustumPointFar), Camera::cameraFrustumNormalFar) > boundingRadius)
 		{
 			return;
 		}
