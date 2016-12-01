@@ -3,6 +3,12 @@
 
 class Cone : public Geode {
 public:
-	Cone() : Geode(new Model("cone.obj")) {};
-	Cone(Material* mat) : Geode(new Model("cone.obj"), mat) {};
+	Cone() : Geode(model()) {};
+	Cone(Material* mat) : Geode(model(), mat) {};
+private:
+	static Model* model()
+	{
+		static Model* model = new Model("cone.obj");
+		return model;
+	}
 };

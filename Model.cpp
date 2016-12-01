@@ -2,6 +2,8 @@
 
 Model::Model(vector<GLfloat>& vertices, vector<GLfloat>& normals, vector<GLuint>& faceVertexIndices)
 {
+	findMinMax(vertices);
+
 	count = faceVertexIndices.size();
 
 	glGenVertexArrays(1, &VAO);
@@ -30,6 +32,7 @@ Model::Model(vector<GLfloat>& vertices, vector<GLfloat>& normals, vector<GLuint>
 
 void Model::updateData(vector<GLfloat>& vertices, vector<GLfloat>& normals)
 {
+	findMinMax(vertices);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(GLfloat), &vertices[0]);
 	glBindBuffer(GL_ARRAY_BUFFER, VBON);
@@ -39,6 +42,7 @@ void Model::updateData(vector<GLfloat>& vertices, vector<GLfloat>& normals)
 
 void Model::updateData(vector<GLfloat>& vertices)
 {
+	findMinMax(vertices);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(GLfloat), &vertices[0]);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -112,6 +116,8 @@ Model::Model(char* filepath, Texture* texture):texture(texture)
 	}
 	fclose(fp);
 
+	findMinMax(vertices);
+
 	count = faceVertexIndices.size();
 
 	glGenVertexArrays(1, &VAO);
@@ -168,4 +174,37 @@ void Model::draw()
 	glBindVertexArray(VAO);
 	glDrawElements(g_DrawMode, count, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
+}
+
+void Model::findMinMax(vector<GLfloat>& vertices)
+{
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		if (vertices[i] < minX)
+		{
+			minX = vertices[i];
+		}
+		else if (vertices[i] > maxX)
+		{
+			maxX = vertices[i];
+		}
+		i++;
+		if (vertices[i] < minY)
+		{
+			minY = vertices[i];
+		}
+		else if (vertices[i] > maxY)
+		{
+			maxY = vertices[i];
+		}
+		i++;
+		if (vertices[i] < minZ)
+		{
+			minZ = vertices[i];
+		}
+		else if (vertices[i] > maxZ)
+		{
+			maxZ = vertices[i];
+		}
+	}
 }

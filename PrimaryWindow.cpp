@@ -92,6 +92,15 @@ void PrimaryWindow::init(int width, int height, char* title)
 
 	//Initialize objects
 	Geode::scene->add(new Sphere());
+	for (int i = 0; i < 100; i++)
+	{
+		for (int j = 0; j < 100; j++)
+		{
+			Pyramid* p = new Pyramid();
+			p->translate(i * 3 - 150, 0, j * 3);
+			Geode::scene->add(p);
+		}
+	}
 
 
 	resize_callback(window, width, height);
@@ -140,16 +149,62 @@ void PrimaryWindow::key_callback(GLFWwindow* window, int key, int scancode, int 
 
 void PrimaryWindow::char_callback(GLFWwindow* window, unsigned codepoint)
 {
+	switch (codepoint)
+	{
+	case 'r':
+		cam_pos = vec3(0, 0, 20.0f);
+		cam_look_at = vec3(0.0f, 0.0f, 0.0f);
+		V = lookAt(cam_pos, cam_look_at, cam_up);
+		break;
+	}
 }
 
-void PrimaryWindow::cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
+void PrimaryWindow::cursor_pos_callback(GLFWwindow* window, double newX, double newY)
 {
+	if (leftPress)
+	{
+		mat4 rotation = trackballRotate(trackballMap(curX, curY), trackballMap(newX, newY));
+		cam_pos = vec3(rotation * vec4(cam_pos, 1.0));
+		V = lookAt(cam_pos, cam_look_at, cam_up);
+	}
+	curX = newX;
+	curY = newY;
 }
 
 void PrimaryWindow::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
+	if (button == GLFW_MOUSE_BUTTON_RIGHT)
+	{
+		rightPress = action == GLFW_PRESS;
+	}
+	else if (button == GLFW_MOUSE_BUTTON_LEFT)
+	{
+		leftPress = action == GLFW_PRESS;
+	}
 }
 
 void PrimaryWindow::scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
+	if (length(cam_pos) < 10000.0f || yoffset > 0)
+	{
+		cam_pos *= 1 + yoffset / -10.0f;
+		V = lookAt(cam_pos, cam_look_at, cam_up);
+	}
+}
+
+vec3 PrimaryWindow::trackballMap(double x, double y)
+{
+	x = (2 * x - width) / width;
+	y = (height - 2 * y) / height;
+	double dSquare = x * x + y * y;
+	if (dSquare > 1.0)
+	{
+		dSquare = 1.0;
+	}
+	return normalize(vec3(x, y, sqrt(1.0 - dSquare)));
+}
+
+mat4 PrimaryWindow::trackballRotate(vec3 from, vec3 to)
+{
+	return rotate(length(to - from), cross(from, to));
 }

@@ -5,11 +5,17 @@ class Cube :
 	public Geode
 {
 public:
-	Cube() : Geode(new Model("cube.obj"))
+	Cube() : Geode(model())
 	{
 	};
 
-	Cube(Material* mat) : Geode(new Model("cube.obj"), mat)
+	Cube(Material* mat) : Geode(model(), mat)
 	{
 	};
+private:
+	static Model* model()
+	{
+		static Model* model = new Model("cube.obj");
+		return model;
+	}
 };

@@ -3,6 +3,13 @@
 
 class Cylinder : public Geode {
 public:
-	Cylinder() : Geode(new Model("cylinder.obj")) {};
-	Cylinder(Material* mat) : Geode(new Model("cylinder.obj"), mat) {};
+	Cylinder() : Geode(model()) {};
+	Cylinder(Material* mat) : Geode(model(), mat) {};
+
+private:
+	static Model* model()
+	{
+		static Model* model = new Model("cube.obj");
+		return model;
+	}
 };

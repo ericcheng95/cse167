@@ -19,10 +19,15 @@ public:
 	
 
 	int id;
-	Model* model;
 	Material* material;
 	list<Geode*> children;
+	list<Geode*> parents;
 	mat4 M;
+	
+	vec4 minPos = vec4(999999.9f, 999999.9f, 999999.9f, 0);
+	vec4 maxPos = vec4(-999999.9f, -999999.9f, -999999.9f, 0);
+	vec4 center;
+	float boundingRadius;
 
 	Geode();
 	Geode(Material* mat);
@@ -40,5 +45,9 @@ public:
 	void reset();
 	void set(mat4 m);
 	void add(Geode* geode);
-	void remove(Geode* geode);
+
+private:
+
+	Model* model;
+	void findMinMax(vec4 min, vec4 max);
 };

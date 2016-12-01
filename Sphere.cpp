@@ -12,6 +12,12 @@ Sphere::Sphere(Material* mat) : Geode(mat)
 
 Model* Sphere::generateSphere(int horizontalSegments, int verticalSegments)
 {
+	static Model* model;
+	if (model != nullptr)
+	{
+		return model;
+	}
+
 	if (horizontalSegments < 2)
 	{
 		horizontalSegments = 2;
@@ -79,6 +85,6 @@ Model* Sphere::generateSphere(int horizontalSegments, int verticalSegments)
 		faceVertexIndices.push_back(startingIndex - verticalSegments); //c
 		faceVertexIndices.push_back(startingIndex); //d
 	}
-
-	return new Model(vertices, vertices, faceVertexIndices);
+	model = new Model(vertices, vertices, faceVertexIndices);
+	return model;
 }

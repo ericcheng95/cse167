@@ -32,6 +32,9 @@ public:
 	static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 	static void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
+	static vec3 trackballMap(double x, double y);
+	static mat4 trackballRotate(vec3 from, vec3 to);
+
 private:
 	static double curX;
 	static double curY;

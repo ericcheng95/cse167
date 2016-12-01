@@ -3,7 +3,13 @@
 
 class Pyramid : public Geode {
 public:
-	Pyramid() : Geode(new Model("pyramid.obj")) {};
-	Pyramid(Material* mat) : Geode(new Model("pyramid.obj"), mat) {};
+	Pyramid() : Geode(model()) {};
+	Pyramid(Material* mat) : Geode(model(), mat) {};
+private:
+	static Model* model()
+	{
+		static Model* model = new Model("pyramid.obj");
+		return model;
+	}
 };
 
