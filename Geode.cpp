@@ -58,6 +58,17 @@ Geode::Geode(Model* m, Material* mat, mat4 M) : model(m), material(mat), M(M)
 	}
 }
 
+void Geode::init(unsigned int shader)
+{
+	scene->enableCulling = false;
+	Geode::uModel = glGetUniformLocation(shader, "model");
+	Geode::uDiffuse = glGetUniformLocation(shader, "material.diffuseCoeff");
+	Geode::uSpecular = glGetUniformLocation(shader, "material.specularCoeff");
+	Geode::uAmbient = glGetUniformLocation(shader, "material.ambientCoeff");
+	Geode::uShininess = glGetUniformLocation(shader, "material.shininessExp");
+	Geode::uReflectivity = glGetUniformLocation(shader, "material.reflectivity");
+}
+
 Geode::Geode(): Geode(nullptr, defaultMaterial, mat4(1.0f))
 {
 }

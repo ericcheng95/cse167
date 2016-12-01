@@ -9,6 +9,8 @@
 class Geode
 {
 public:
+	static void init(unsigned int shader);
+
 	static const vec3 xAxis;
 	static const vec3 yAxis;
 	static const vec3 zAxis;

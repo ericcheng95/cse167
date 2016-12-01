@@ -13,6 +13,13 @@ int Camera::uProjection, Camera::uView, Camera::uCamera;
 mat4 Camera::P;
 mat4 Camera::V;
 
+void Camera::init(unsigned int shader)
+{
+	Camera::uProjection = glGetUniformLocation(shader, "projection");
+	Camera::uView = glGetUniformLocation(shader, "view");
+	Camera::uCamera = glGetUniformLocation(shader, "cameraPos");
+}
+
 void Camera::draw()
 {
 	glUniformMatrix4fv(uProjection, 1, GL_FALSE, &P[0][0]);

@@ -18,7 +18,6 @@ struct PointLight
 	float attenuation;
 };
 
-
 struct SpotLight
 {
 	vec3 direction;
@@ -37,6 +36,8 @@ public:
 	static vector<DirectionalLight> directionalLights;
 	static vector<PointLight> pointLights;
 	static vector<SpotLight> spotLights;
+	
+	static void init();
 	static void drawLights(unsigned int shader);
 
 };
