@@ -36,11 +36,10 @@ struct SpotLight
 
 uniform Material material;
 
-#define DIR_LIGHT_COUNT 1
 #define POINT_LIGHT_COUNT 0
 #define SPOT_LIGHT_COUNT 0
 //Add 1 since array size must be positive integer for some reason
-uniform DirectionalLight directionalLights[DIR_LIGHT_COUNT+1];
+uniform DirectionalLight directionalLight;
 uniform PointLight pointLights[POINT_LIGHT_COUNT+1];
 uniform SpotLight spotLights[SPOT_LIGHT_COUNT+1];
 
@@ -53,35 +52,34 @@ in vec2 TexCoord;
 
 uniform vec3 cameraPos;
 //uniform samplerCube skybox;
-uniform sampler2D texture;
+uniform sampler2D texture2D;
 
 out vec4 color;
 
 void main()
 {
-	color = texture(texture, TexCoord);
-	vec3 normal = normalize(Normal);
+	color = texture(texture2D, TexCoord);
+	vec3 norm = normalize(Normal);
 	vec3 viewDir = normalize(cameraPos - FragPos);
 	//vec4 skyboxEnvironmentColor = texture(skybox, reflect(-1.0f * viewDir, normal));
 	//color += material.reflectivity * skyboxEnvironmentColor;
-	for (int i = 0; i < DIR_LIGHT_COUNT; i++){
-		DirectionalLight directionalLight = directionalLights[i];
-		vec3 lightDir = normalize(-directionalLight.direction);
-		vec3 ambient  = directionalLight.ambient * material.ambientCoeff;
-		vec3 diffuse = directionalLight.diffuse * max(dot(normal, lightDir), 0.0f) * material.diffuseCoeff;
-		vec3 halfway = normalize(viewDir + lightDir);
-		vec3 specular = directionalLight.specular * pow(max(dot(halfway, normal), 0.0f), material.shininessExp);
-		color += vec4(ambient + diffuse + specular, 1.0f);
-	}
+
+	vec3 lightDir = normalize(-directionalLight.direction);
+	vec3 ambient  = directionalLight.ambient * material.ambientCoeff;
+	vec3 diffuse = directionalLight.diffuse * max(dot(norm, lightDir), 0.0f) * material.diffuseCoeff;
+	vec3 halfway = normalize(viewDir + lightDir);
+	vec3 specular = directionalLight.specular * pow(max(dot(halfway, norm), 0.0f), material.shininessExp);
+	color += vec4(ambient + diffuse + specular, 1.0f);
+
 	for (int i = 0; i < POINT_LIGHT_COUNT; i++){
 		PointLight pointLight = pointLights[i];
 		vec3 lightVector = pointLight.position - FragPos;
 		vec3 lightDir = normalize(lightVector);
 
 		vec3 ambient  = pointLight.ambient * material.ambientCoeff;
-		vec3 diffuse = pointLight.diffuse * max(dot(normal, lightDir),  0.0f) * material.diffuseCoeff;
+		vec3 diffuse = pointLight.diffuse * max(dot(norm, lightDir),  0.0f) * material.diffuseCoeff;
 		vec3 halfway = normalize(viewDir + lightDir);
-		vec3 specular = pointLight.specular * pow(max(dot(halfway, normal), 0.0f), material.shininessExp);
+		vec3 specular = pointLight.specular * pow(max(dot(halfway, norm), 0.0f), material.shininessExp);
 		float distance = length(lightVector);
 		color += vec4((ambient + diffuse + specular) / (pointLight.attenuation * distance * distance), 1.0f);
 	}
@@ -92,9 +90,9 @@ void main()
 		float falloff = -dot(lightDir, normalize(spotLight.direction));
 		if (falloff > cos(spotLight.spotCutoff)){
 				vec3 ambient  = spotLight.ambient * material.ambientCoeff;
-				vec3 diffuse = spotLight.diffuse * max(dot(normal, lightDir),  0.0f) * material.diffuseCoeff;
+				vec3 diffuse = spotLight.diffuse * max(dot(norm, lightDir),  0.0f) * material.diffuseCoeff;
 				vec3 halfway = normalize(viewDir + lightDir);
-				vec3 specular = spotLight.specular * pow(max(dot(halfway, normal), 0.0f), material.shininessExp);
+				vec3 specular = spotLight.specular * pow(max(dot(halfway, norm), 0.0f), material.shininessExp);
 				float distance = length(lightVector);
 				color += vec4((ambient + diffuse + specular) / (spotLight.attenuation * distance * distance) * pow(falloff, spotLight.spotExponent), 1.0f);
 		}

@@ -17,6 +17,8 @@ public:
 
 	static Geode* scene;
 	
+	static int uModel, uDiffuse, uSpecular, uAmbient, uShininess, uReflectivity;
+
 
 	int id;
 	Material* material;
@@ -24,10 +26,11 @@ public:
 	list<Geode*> parents;
 	mat4 M;
 	
-	vec4 minPos = vec4(999999.9f, 999999.9f, 999999.9f, 0);
-	vec4 maxPos = vec4(-999999.9f, -999999.9f, -999999.9f, 0);
+	vec4 minPos = vec4(999999.9f, 999999.9f, 999999.9f, 1.0f);
+	vec4 maxPos = vec4(-999999.9f, -999999.9f, -999999.9f, 1.0f);
 	vec4 center;
 	float boundingRadius;
+	bool enableCulling = true;
 
 	Geode();
 	Geode(Material* mat);
@@ -45,9 +48,11 @@ public:
 	void reset();
 	void set(mat4 m);
 	void add(Geode* geode);
+	void translate(vec3 t);
 
 private:
 
 	Model* model;
 	void findMinMax(vec4 min, vec4 max);
+	void findParentMinMax();
 };

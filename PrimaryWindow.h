@@ -19,6 +19,12 @@ public:
 	static unsigned int selectionShader;
 
 	static vec3 cam_pos, cam_look_at, cam_up, cam_right;
+	static vec3 cameraFrustumNormalLeft, cameraFrustumNormalRight, cameraFrustumNormalTop, cameraFrustumNormalBottom, cameraFrustumNormalNear, cameraFrustumNormalFar;
+	static vec3 cameraFrustumPointLeft, cameraFrustumPointRight, cameraFrustumPointTop, cameraFrustumPointBottom, cameraFrustumPointNear, cameraFrustumPointFar;
+	static void updateV();
+	static bool enableCulling;
+
+	static int uProjection, uView, uCamera;
 
 	static Skybox* skybox;
 
@@ -34,7 +40,7 @@ public:
 
 	static vec3 trackballMap(double x, double y);
 	static mat4 trackballRotate(vec3 from, vec3 to);
-
+	
 private:
 	static double curX;
 	static double curY;

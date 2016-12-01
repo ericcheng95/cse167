@@ -1,13 +1,13 @@
 #include "Sphere.h"
 
-Sphere::Sphere() : Geode()
+Sphere::Sphere() : Geode(generateSphere(16, 24))
 {
-	model = generateSphere(16, 24);
+	
 }
 
-Sphere::Sphere(Material* mat) : Geode(mat)
+Sphere::Sphere(Material* mat) : Geode(generateSphere(16, 24), mat)
 {
-	model = generateSphere(16, 24);
+	
 }
 
 Model* Sphere::generateSphere(int horizontalSegments, int verticalSegments)

@@ -72,9 +72,9 @@ void Skybox::updatePerspective(int width, int height)
 void Skybox::draw(mat4 view)
 {
 	texture->bind();
-
-	glDepthMask(GL_FALSE);// Remember to turn depth writing off
 	glUseProgram(skyboxShader);
+	glDepthMask(GL_FALSE);
+	
 	glUniformMatrix4fv(glGetUniformLocation(skyboxShader, "view"), 1, GL_FALSE, &view[0][0]);
 	glUniformMatrix4fv(glGetUniformLocation(skyboxShader, "projection"), 1, GL_FALSE, value_ptr(skyboxPerspective));
 	

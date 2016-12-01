@@ -170,7 +170,6 @@ void Model::draw()
 	{
 		texture->bind();
 	}
-	glPolygonMode(g_PolygonFace, g_PolygonMode);
 	glBindVertexArray(VAO);
 	glDrawElements(g_DrawMode, count, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);

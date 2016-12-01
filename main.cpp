@@ -9,6 +9,7 @@ int main(void)
 	
 	PrimaryWindow::init(640, 480, "Primary Window");
 	
+
 	while (!glfwWindowShouldClose(PrimaryWindow::window))
 	{
 	
@@ -21,6 +22,7 @@ int main(void)
 			cout <<"FPS: " << frames * 1000000000.0 / t << endl;
 			frames = 0;
 			time_point = chrono::system_clock::now();
+			cout << PrimaryWindow::enableCulling << endl;
 		}
 	}
 

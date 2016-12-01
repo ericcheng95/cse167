@@ -1,4 +1,5 @@
 #include "Geode.h"
+#include "PrimaryWindow.h"
 const vec3 Geode::xAxis = vec3(1, 0, 0);
 const vec3 Geode::yAxis = vec3(0, 1, 0);
 const vec3 Geode::zAxis = vec3(0, 0, 1);
@@ -12,18 +13,33 @@ Material* Geode::defaultMaterial = new Material{
 int Geode::geodeCounter = 1;
 Geode* Geode::scene = new Geode();
 
+int Geode::uModel, Geode::uDiffuse, Geode::uSpecular, Geode::uAmbient, Geode::uShininess, Geode::uReflectivity;
+
+
 void Geode::draw(mat4 C, unsigned int shaderProgram)
 {
 	mat4 CM = C * M;
-
+	// Cull if out of bounds
+	if (PrimaryWindow::enableCulling && enableCulling) {
+		vec3 v = vec3(CM * center);
+		if (dot((v - PrimaryWindow::cameraFrustumPointLeft), PrimaryWindow::cameraFrustumNormalLeft) > boundingRadius
+			|| dot((v - PrimaryWindow::cameraFrustumPointRight), PrimaryWindow::cameraFrustumNormalRight) > boundingRadius
+			|| dot((v - PrimaryWindow::cameraFrustumPointTop), PrimaryWindow::cameraFrustumNormalTop) > boundingRadius
+			|| dot((v - PrimaryWindow::cameraFrustumPointBottom), PrimaryWindow::cameraFrustumNormalBottom) > boundingRadius
+			|| dot((v - PrimaryWindow::cameraFrustumPointNear), PrimaryWindow::cameraFrustumNormalNear) > boundingRadius
+			|| dot((v - PrimaryWindow::cameraFrustumPointFar), PrimaryWindow::cameraFrustumNormalFar) > boundingRadius)
+		{
+			return;
+		}
+	}
 
 	if (model != nullptr) {
-		glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model"), 1, GL_FALSE, &CM[0][0]);
-		glUniform3fv(glGetUniformLocation(shaderProgram, "material.diffuseCoeff"), 1, &material->diffuseCoeff[0]);
-		glUniform3fv(glGetUniformLocation(shaderProgram, "material.specularCoeff"), 1, &material->specularCoeff[0]);
-		glUniform3fv(glGetUniformLocation(shaderProgram, "material.ambientCoeff"), 1, &material->ambientCoeff[0]);
-		glUniform1f(glGetUniformLocation(shaderProgram, "material.shininessExp"), material->shininessExp);
-		glUniform1f(glGetUniformLocation(shaderProgram, "material.reflectivity"), material->reflectivity);
+		glUniformMatrix4fv(uModel, 1, GL_FALSE, &CM[0][0]);
+		glUniform3fv(uDiffuse, 1, &material->diffuseCoeff[0]);
+		glUniform3fv(uSpecular, 1, &material->specularCoeff[0]);
+		glUniform3fv(uAmbient, 1, &material->ambientCoeff[0]);
+		glUniform1f(uShininess, material->shininessExp);
+		glUniform1f(uReflectivity, material->reflectivity);
 		model->draw();
 	}
 
@@ -37,7 +53,9 @@ void Geode::draw(mat4 C, unsigned int shaderProgram)
 Geode::Geode(Model* m, Material* mat, mat4 M) : model(m), material(mat), M(M)
 {
 	id = geodeCounter++;
-	findMinMax(vec4(m->minX, m->minY, m->minZ, 1.0f), vec4(m->maxX, m->maxY, m->maxZ, 1.0f));
+	if (m != nullptr) {
+		findMinMax(vec4(m->minX, m->minY, m->minZ, 1.0f), vec4(m->maxX, m->maxY, m->maxZ, 1.0f));
+	}
 }
 
 Geode::Geode(): Geode(nullptr, defaultMaterial, mat4(1.0f))
@@ -70,6 +88,7 @@ void Geode::reset()
 void Geode::set(mat4 m)
 {
 	M = m;
+	findParentMinMax();
 }
 
 void Geode::add(Geode* geode)
@@ -85,9 +104,15 @@ void Geode::translate(float x, float y, float z)
 	translate(glm::translate(vec3(x, y, z)));
 }
 
+void Geode::translate(vec3 t)
+{
+	translate(glm::translate(t));
+}
+
 void Geode::translate(mat4 T)
 {
 	M = T * M;
+	findParentMinMax();
 }
 
 void Geode::scale(float amountX, float amountY, float amountZ)
@@ -107,33 +132,43 @@ void Geode::rotate(mat4 R)
 
 void Geode::findMinMax(vec4 min, vec4 max)
 {
-	if (min.x < minPos.x)
-	{
-		minPos.x = min.x;
-	}
-	else if (max.x > maxPos.x)
-	{
-		maxPos.x = max.x;
-	}
-	if (min.y < minPos.y)
-	{
-		minPos.y = min.y;
-	}
-	else if (max.y > maxPos.y)
-	{
-		maxPos.y = max.y;
-	}
-	if (min.z < minPos.z)
-	{
-		minPos.z = min.z;
-	}
-	else if (max.z > maxPos.z)
-	{
-		maxPos.z = max.z;
-	}
-	center = maxPos + minPos;
-	boundingRadius = distance(maxPos, center);
+	if (enableCulling) {
+		if (min.x < minPos.x)
+		{
+			minPos.x = min.x;
+		}
+		if (max.x > maxPos.x)
+		{
+			maxPos.x = max.x;
+		}
+		if (min.y < minPos.y)
+		{
+			minPos.y = min.y;
+		}
+		if (max.y > maxPos.y)
+		{
+			maxPos.y = max.y;
+		}
+		if (min.z < minPos.z)
+		{
+			minPos.z = min.z;
+		}
+		if (max.z > maxPos.z)
+		{
+			maxPos.z = max.z;
+		}
+		center = maxPos + minPos;
+		boundingRadius = distance(maxPos, center) + 3.0f;
 
+		for (auto it = parents.begin(); it != parents.end(); it++)
+		{
+			findMinMax(M * minPos, M * maxPos);
+		}
+	}
+}
+
+void Geode::findParentMinMax()
+{
 	for (auto it = parents.begin(); it != parents.end(); it++)
 	{
 		findMinMax(M * minPos, M * maxPos);
