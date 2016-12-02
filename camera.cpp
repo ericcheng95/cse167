@@ -37,7 +37,7 @@ void Camera::reset()
 void Camera::updateV()
 {
 	V = lookAt(cam_pos, cam_look_at, cam_up);
-	float pi = 3.1415926;
+	float pi = 3.1415926f;
 	float hfar = tan(28.0f * pi / 180.0f) * 1000.0f;
 	float wfar = hfar * PrimaryWindow::width / PrimaryWindow::height;
 

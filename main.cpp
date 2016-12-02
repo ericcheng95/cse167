@@ -32,7 +32,7 @@ int main(void)
 
 void printFPS(long long duration)
 {
-	static long totalDuration = 0;
+	static long long totalDuration = 0;
 	static long frames = 0;
 	frames++;
 	totalDuration += duration;
@@ -50,5 +50,5 @@ float lastFrameElapsedSeconds()
 	long long duration = duration_cast<nanoseconds>(thisTime - lastTime).count();
 	lastTime = thisTime;
 	printFPS(duration);
-	return duration / 1000000000.0;
+	return (float)(duration / 1000000000.0);
 }

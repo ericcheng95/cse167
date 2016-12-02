@@ -4,7 +4,7 @@ Model::Model(vector<GLfloat>& vertices, vector<GLfloat>& normals, vector<GLuint>
 {
 	findMinMax(vertices);
 
-	count = faceVertexIndices.size();
+	count = (int)(faceVertexIndices.size());
 
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
@@ -118,7 +118,7 @@ Model::Model(char* filepath, Texture* texture):texture(texture)
 
 	findMinMax(vertices);
 
-	count = faceVertexIndices.size();
+	count = (int)(faceVertexIndices.size());
 
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);

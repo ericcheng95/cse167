@@ -75,7 +75,7 @@ void PrimaryWindow::init(int width, int height, char* title)
 		for (int j = 0; j < 150; j++)
 		{
 			Cube* p = new Cube();
-			p->translate(i - 50, -10, j - 50);
+			p->translate(i - 50.0f, -10.0f, j - 50.0f);
 			//Geode::scene->add(p);
 		}
 	}

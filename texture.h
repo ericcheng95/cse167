@@ -1,7 +1,8 @@
 #pragma once
 #include "image.h"
 #include "main.h"
-#include "packages/nupengl.core.0.1.0.1/build/native/include/GL/glew.h"
+
+
 
 class Texture
 {
