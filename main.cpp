@@ -1,29 +1,24 @@
 #include "main.h"
 #include "PrimaryWindow.h"
+#include "ActionObject.h"
 
+float lastFrameElapsedSeconds();
 
 int main(void)
 {
-	chrono::time_point<chrono::system_clock> time_point = chrono::system_clock::now();
-	long frames = 0;
 	
 	PrimaryWindow::init(640, 480, "Primary Window");
-	
-
+	float secondsElapsed = 0.0000001f;
 	while (!glfwWindowShouldClose(PrimaryWindow::window))
 	{
-	
+
 		PrimaryWindow::display_callback();
+		glfwPollEvents();
+		ActionObject::allAct(secondsElapsed);
 
 
-		frames++;
-		long long t = chrono::duration_cast<chrono::nanoseconds>(chrono::system_clock::now() - time_point).count();
-		if (t > 1000000000) {
-			cout <<"FPS: " << frames * 1000000000.0 / t << endl;
-			frames = 0;
-			time_point = chrono::system_clock::now();
-			cout << PrimaryWindow::enableCulling << endl;
-		}
+
+		secondsElapsed = lastFrameElapsedSeconds();
 	}
 
 	// Destroy the window
@@ -32,4 +27,28 @@ int main(void)
 	glfwTerminate();
 
 	exit(EXIT_SUCCESS);
+}
+
+
+void printFPS(long long duration)
+{
+	static long totalDuration = 0;
+	static long frames = 0;
+	frames++;
+	totalDuration += duration;
+	if (totalDuration > 1000000000) {
+		cout << "FPS: " << frames * 1000000000.0 / duration << endl;
+		frames = 0;
+		totalDuration = 0;
+	}
+}
+
+float lastFrameElapsedSeconds()
+{
+	static time_point<system_clock> lastTime = system_clock::now();
+	auto thisTime = system_clock::now();
+	long long duration = duration_cast<nanoseconds>(thisTime - lastTime).count();
+	lastTime = thisTime;
+	printFPS(duration);
+	return duration / 1000000000.0;
 }

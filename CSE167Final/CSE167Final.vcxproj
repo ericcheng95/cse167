@@ -127,7 +127,9 @@
     <None Include="skyboxShader.vert" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\ActionObject .cpp" />
     <ClCompile Include="..\camera.cpp" />
+    <ClCompile Include="..\CollidableObject.cpp" />
     <ClCompile Include="..\control.cpp" />
     <ClCompile Include="..\Geode.cpp" />
     <ClCompile Include="..\Light.cpp" />
@@ -141,7 +143,9 @@
     <ClCompile Include="..\Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\ActionObject.h" />
     <ClInclude Include="..\camera.h" />
+    <ClInclude Include="..\CollidableObject.h" />
     <ClInclude Include="..\Cone.h" />
     <ClInclude Include="..\control.h" />
     <ClInclude Include="..\Cube.h" />

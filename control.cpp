@@ -1,19 +1,14 @@
 #include "control.h"
 #include "PrimaryWindow.h"
 
-
-double Control::curMouseX;
-double Control::curMouseY;
-bool Control::leftClick;
-bool Control::rightClick;
-bool Control::leftPress=false, Control::rightPress=false, Control::upPress=false, Control::downPress=false, Control::wPress=false, Control::aPress=false, Control::sPress=false, Control::dPress = false;
+double Control::curMouseX = 0;
+double Control::curMouseY = 0;
+bool Control::leftClick = false, Control::rightClick = false;
+bool Control::leftPress = false, Control::rightPress = false, Control::upPress = false, Control::downPress = false;
+bool Control::wPress = false, Control::aPress = false, Control::sPress = false, Control::dPress = false;
 
 void Control::init(GLFWwindow* window)
 {
-	curMouseX = 0;
-	curMouseY = 0;
-	leftPress = false;
-	rightPress = false;
 	glfwSetKeyCallback(window, key_callback);
 	glfwSetCharCallback(window, char_callback);
 	glfwSetMouseButtonCallback(window, mouse_button_callback);
@@ -23,19 +18,71 @@ void Control::init(GLFWwindow* window)
 
 void Control::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	// Check for a key press
 	if (action == GLFW_PRESS)
 	{
-		// Check if escape was pressed
 		switch (key)
 		{
 		case GLFW_KEY_ESCAPE:
-			// Close the window. This causes the program to also terminate.
 			glfwSetWindowShouldClose(window, GL_TRUE);
 			break;
 
 		case GLFW_KEY_UP:
-			//TODO: this and other ones
+			upPress = true;
+			break;
+		case GLFW_KEY_DOWN:
+			downPress = true;
+			break;
+		case GLFW_KEY_LEFT:
+			leftPress = true;
+			break;
+		case GLFW_KEY_RIGHT:
+			rightPress = true;
+			break;
+		case GLFW_KEY_W:
+			wPress = true;
+			break;
+		case GLFW_KEY_S:
+			sPress = true;
+			break;
+		case GLFW_KEY_A:
+			aPress = true;
+			break;
+		case GLFW_KEY_D:
+			dPress = true;
+			break;
+		}
+	}
+	else if (action == GLFW_RELEASE)
+	{
+		switch (key)
+		{
+		case GLFW_KEY_ESCAPE:
+			glfwSetWindowShouldClose(window, GL_TRUE);
+			break;
+
+		case GLFW_KEY_UP:
+			upPress = false;
+			break;
+		case GLFW_KEY_DOWN:
+			downPress = false;
+			break;
+		case GLFW_KEY_LEFT:
+			leftPress = false;
+			break;
+		case GLFW_KEY_RIGHT:
+			rightPress = false;
+			break;
+		case GLFW_KEY_W:
+			wPress = false;
+			break;
+		case GLFW_KEY_S:
+			sPress = false;
+			break;
+		case GLFW_KEY_A:
+			aPress = false;
+			break;
+		case GLFW_KEY_D:
+			dPress = false;
 			break;
 		}
 	}
@@ -86,5 +133,3 @@ void Control::scroll_callback(GLFWwindow* window, double xoffset, double yoffset
 		Camera::updateV();
 	}
 }
-
-

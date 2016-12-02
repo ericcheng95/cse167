@@ -12,7 +12,7 @@ unsigned int PrimaryWindow::selectionShader;
 
 Skybox* PrimaryWindow::skybox;
 
-bool PrimaryWindow::enableCulling = false;
+bool PrimaryWindow::enableCulling = true;
 
 void PrimaryWindow::init(int width, int height, char* title)
 {
@@ -99,7 +99,6 @@ void PrimaryWindow::display_callback()
 	Geode::scene->draw(mat4(1.0f), shader);
 
 	glfwSwapBuffers(window);
-	glfwPollEvents();
 }
 
 void PrimaryWindow::resize_callback(GLFWwindow* window, int width, int height)
