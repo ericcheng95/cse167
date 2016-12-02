@@ -6,15 +6,14 @@ const vec3 Geode::yAxis = vec3(0, 1, 0);
 const vec3 Geode::zAxis = vec3(0, 0, 1);
 Material* Geode::defaultMaterial = new Material{
 	vec3(0.6f, 0.6f, 0.6f),
-	10,
-	vec3(0.1f, 0.1f, 0.1f),
+	10.0f,
 	vec3(0.2f, 0.2f, 0.2f),
 	0.0f };
 
 int Geode::geodeCounter = 1;
 Geode* Geode::scene = new Geode();
 
-int Geode::uModel, Geode::uDiffuse, Geode::uSpecular, Geode::uAmbient, Geode::uShininess, Geode::uReflectivity;
+int Geode::uModel, Geode::uDiffuse, Geode::uSpecular, Geode::uAmbient, Geode::uReflectivity;
 
 void Geode::draw(mat4 C, unsigned int shaderProgram)
 {
@@ -36,9 +35,8 @@ void Geode::draw(mat4 C, unsigned int shaderProgram)
 	if (model != nullptr) {
 		glUniformMatrix4fv(uModel, 1, GL_FALSE, &CM[0][0]);
 		glUniform3fv(uDiffuse, 1, &material->diffuseCoeff[0]);
-		glUniform3fv(uSpecular, 1, &material->specularCoeff[0]);
+		glUniform1f(uSpecular, material->specularExp);
 		glUniform3fv(uAmbient, 1, &material->ambientCoeff[0]);
-		glUniform1f(uShininess, material->shininessExp);
 		glUniform1f(uReflectivity, material->reflectivity);
 		model->draw();
 	}
@@ -61,12 +59,11 @@ Geode::Geode(Model* m, Material* mat, mat4 M) : model(m), material(mat), M(M)
 void Geode::init(unsigned int shader)
 {
 	scene->enableCulling = false;
-	Geode::uModel = glGetUniformLocation(shader, "model");
-	Geode::uDiffuse = glGetUniformLocation(shader, "material.diffuseCoeff");
-	Geode::uSpecular = glGetUniformLocation(shader, "material.specularCoeff");
-	Geode::uAmbient = glGetUniformLocation(shader, "material.ambientCoeff");
-	Geode::uShininess = glGetUniformLocation(shader, "material.shininessExp");
-	Geode::uReflectivity = glGetUniformLocation(shader, "material.reflectivity");
+	uModel = glGetUniformLocation(shader, "model");
+	uDiffuse = glGetUniformLocation(shader, "material.diffuseCoeff");
+	uSpecular = glGetUniformLocation(shader, "material.specularExp");
+	uAmbient = glGetUniformLocation(shader, "material.ambientCoeff");
+	uReflectivity = glGetUniformLocation(shader, "material.reflectivity");
 }
 
 Geode::Geode(): Geode(nullptr, defaultMaterial, mat4(1.0f))

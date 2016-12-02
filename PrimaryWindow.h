@@ -17,6 +17,10 @@ public:
 	static unsigned int shader;
 	static unsigned int selectionShader;
 
+
+	static GLuint gBuffer;
+
+
 	static bool enableCulling;
 
 	static Skybox* skybox;
@@ -27,6 +31,7 @@ public:
 
 	
 private:
+	static void genGBuffer();
 };
 
 #endif

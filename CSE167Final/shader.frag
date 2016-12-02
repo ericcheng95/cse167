@@ -2,8 +2,7 @@
 struct Material
 {
 	vec3 diffuseCoeff;
-	float shininessExp;
-	vec3 specularCoeff;
+	float specularExp;
 	vec3 ambientCoeff;
 	float reflectivity;
 };
@@ -68,7 +67,7 @@ void main()
 	vec3 ambient  = directionalLight.ambient * material.ambientCoeff;
 	vec3 diffuse = directionalLight.diffuse * max(dot(norm, lightDir), 0.0f) * material.diffuseCoeff;
 	vec3 halfway = normalize(viewDir + lightDir);
-	vec3 specular = directionalLight.specular * pow(max(dot(halfway, norm), 0.0f), material.shininessExp);
+	vec3 specular = directionalLight.specular * pow(max(dot(halfway, norm), 0.0f), material.specularExp);
 	color += vec4(ambient + diffuse + specular, 1.0f);
 
 	for (int i = 0; i < POINT_LIGHT_COUNT; i++){
@@ -79,7 +78,7 @@ void main()
 		vec3 ambient  = pointLight.ambient * material.ambientCoeff;
 		vec3 diffuse = pointLight.diffuse * max(dot(norm, lightDir),  0.0f) * material.diffuseCoeff;
 		vec3 halfway = normalize(viewDir + lightDir);
-		vec3 specular = pointLight.specular * pow(max(dot(halfway, norm), 0.0f), material.shininessExp);
+		vec3 specular = pointLight.specular * pow(max(dot(halfway, norm), 0.0f), material.specularExp);
 		float distance = length(lightVector);
 		color += vec4((ambient + diffuse + specular) / (pointLight.attenuation * distance * distance), 1.0f);
 	}
@@ -92,7 +91,7 @@ void main()
 				vec3 ambient  = spotLight.ambient * material.ambientCoeff;
 				vec3 diffuse = spotLight.diffuse * max(dot(norm, lightDir),  0.0f) * material.diffuseCoeff;
 				vec3 halfway = normalize(viewDir + lightDir);
-				vec3 specular = spotLight.specular * pow(max(dot(halfway, norm), 0.0f), material.shininessExp);
+				vec3 specular = spotLight.specular * pow(max(dot(halfway, norm), 0.0f), material.specularExp);
 				float distance = length(lightVector);
 				color += vec4((ambient + diffuse + specular) / (spotLight.attenuation * distance * distance) * pow(falloff, spotLight.spotExponent), 1.0f);
 		}

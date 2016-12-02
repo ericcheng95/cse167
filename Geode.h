@@ -19,7 +19,7 @@ public:
 
 	static Geode* scene;
 	
-	static int uModel, uDiffuse, uSpecular, uAmbient, uShininess, uReflectivity;
+	static int uModel, uDiffuse, uSpecular, uAmbient, uReflectivity;
 
 
 	int id;
