@@ -3,7 +3,7 @@
 class ActionObject
 {
 public:
-	static void allAct(float secondsElapsed); //Runs all active ActionObjects. Called in main
+	static void allPerformActions(float secondsElapsed); //Runs all active ActionObjects. Called in main
 
 	virtual void act(float secondsElapsed);
 	ActionObject(bool active);

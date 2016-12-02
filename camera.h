@@ -12,7 +12,7 @@ public:
 	static mat4 V;
 
 	static void init(unsigned int shader);
-	static void draw();
+	static void enable();
 	static void reset();
 	static void updateV();
 	static void updateP();

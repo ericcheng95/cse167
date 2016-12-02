@@ -244,6 +244,3 @@ ModelManifest.xml
 # FAKE - F# Make
 .fake/
 
-
-!CSE167Final/
-CSE167Final/*

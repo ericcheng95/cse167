@@ -1,10 +1,10 @@
 #include "camera.h"
 #include "PrimaryWindow.h"
 
-vec3 Camera::cam_pos(0.0f, 0.0f, 1.0f); // e  | Position of camera
-vec3 Camera::cam_look_at(0.0f, 0.0f, 0.0f); // d  | This is where the camera looks at
-vec3 Camera::cam_up(0.0f, 1.0f, 0.0f); // up | What orientation "up" is
-vec3 Camera::cam_right(1.0f, 0.0f, 0.0f); // up | What orientation "up" is
+vec3 Camera::cam_pos(0.0f, 0.0f, 1.0f);
+vec3 Camera::cam_look_at(0.0f, 0.0f, 0.0f);
+vec3 Camera::cam_up(0.0f, 1.0f, 0.0f);
+vec3 Camera::cam_right(1.0f, 0.0f, 0.0f);
 vec3 Camera::cameraFrustumNormalLeft, Camera::cameraFrustumNormalRight, Camera::cameraFrustumNormalTop, Camera::cameraFrustumNormalBottom, Camera::cameraFrustumNormalNear, Camera::cameraFrustumNormalFar;
 vec3 Camera::cameraFrustumPointLeft, Camera::cameraFrustumPointRight, Camera::cameraFrustumPointTop, Camera::cameraFrustumPointBottom, Camera::cameraFrustumPointNear, Camera::cameraFrustumPointFar;
 
@@ -15,12 +15,12 @@ mat4 Camera::V;
 
 void Camera::init(unsigned int shader)
 {
-	Camera::uProjection = glGetUniformLocation(shader, "projection");
-	Camera::uView = glGetUniformLocation(shader, "view");
-	Camera::uCamera = glGetUniformLocation(shader, "cameraPos");
+	uProjection = glGetUniformLocation(shader, "projection");
+	uView = glGetUniformLocation(shader, "view");
+	uCamera = glGetUniformLocation(shader, "cameraPos");
 }
 
-void Camera::draw()
+void Camera::enable()
 {
 	glUniformMatrix4fv(uProjection, 1, GL_FALSE, &P[0][0]);
 	glUniformMatrix4fv(uView, 1, GL_FALSE, &V[0][0]);

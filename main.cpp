@@ -6,17 +6,15 @@ float lastFrameElapsedSeconds();
 
 int main(void)
 {
-	
 	PrimaryWindow::init(640, 480, "Primary Window");
 	float secondsElapsed = 0.0000001f;
 	while (!glfwWindowShouldClose(PrimaryWindow::window))
 	{
-
 		PrimaryWindow::display_callback();
+		
 		glfwPollEvents();
-		ActionObject::allAct(secondsElapsed);
-
-
+		
+		ActionObject::allPerformActions(secondsElapsed);
 
 		secondsElapsed = lastFrameElapsedSeconds();
 	}
@@ -36,8 +34,9 @@ void printFPS(long long duration)
 	static long frames = 0;
 	frames++;
 	totalDuration += duration;
-	if (totalDuration > 1000000000) {
-		cout << "FPS: " << frames * 1000000000.0 / duration << endl;
+	if (totalDuration > 1000000000)
+	{
+		cout << "FPS: " << frames * 1000000000.0 / totalDuration << endl;
 		frames = 0;
 		totalDuration = 0;
 	}

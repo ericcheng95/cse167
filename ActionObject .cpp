@@ -17,7 +17,7 @@ void ActionObject::deactivate()
 	active = false;
 }
 
-void ActionObject::allAct(float secondsElapsed)
+void ActionObject::allPerformActions(float secondsElapsed)
 {
 	for (auto it = actionObjects.begin(); it != actionObjects.end(); it++)
 	{

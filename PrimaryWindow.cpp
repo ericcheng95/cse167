@@ -76,7 +76,7 @@ void PrimaryWindow::init(int width, int height, char* title)
 		{
 			Cube* p = new Cube();
 			p->translate(i - 50.0f, -10.0f, j - 50.0f);
-			//Geode::scene->add(p);
+			Geode::scene->add(p);
 		}
 	}
 
@@ -89,10 +89,11 @@ void PrimaryWindow::display_callback()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	Camera::enable();
+
 	skybox->draw(Camera::V);
 
 	glUseProgram(shader);
-
 
 	Light::drawLights(shader);
 
