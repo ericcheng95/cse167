@@ -3,9 +3,12 @@
 #include "ActionObject.h"
 
 float lastFrameElapsedSeconds();
+void error_callback(int error, const char* description);
 
 int main(void)
 {
+	glfwSetErrorCallback(error_callback);
+
 	PrimaryWindow::init(640, 480, "Primary Window");
 	float secondsElapsed = 0.0000001f;
 	while (!glfwWindowShouldClose(PrimaryWindow::window))
@@ -50,4 +53,9 @@ float lastFrameElapsedSeconds()
 	lastTime = thisTime;
 	printFPS(duration);
 	return (float)(duration / 1000000000.0);
+}
+
+void error_callback(int error, const char* description)
+{
+	fputs(description, stderr);
 }
