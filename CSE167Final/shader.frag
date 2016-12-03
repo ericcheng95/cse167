@@ -46,8 +46,7 @@ uniform SpotLight spotLights[SPOT_LIGHT_COUNT+1];
 // Note that you do not have access to the vertex shader's default output, gl_Position.
 in vec3 FragPos;
 in vec3 Normal;
-in vec3 RawNormal;
-in vec2 TexCoord;
+in vec2 TexCoords;
 
 uniform vec3 cameraPos;
 //uniform samplerCube skybox;
@@ -57,7 +56,7 @@ out vec4 color;
 
 void main()
 {
-	color = texture(texture2D, TexCoord);
+	color = texture(texture2D, TexCoords);
 	vec3 norm = normalize(Normal);
 	vec3 viewDir = normalize(cameraPos - FragPos);
 	//vec4 skyboxEnvironmentColor = texture(skybox, reflect(-1.0f * viewDir, normal));

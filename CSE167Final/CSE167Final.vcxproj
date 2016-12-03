@@ -122,6 +122,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="dGeometry.frag" />
+    <None Include="dGeometry.vert" />
+    <None Include="dLighting.frag" />
+    <None Include="dLighting.vert" />
     <None Include="packages.config" />
     <None Include="selectionBuffer.frag" />
     <None Include="selectionBuffer.vert" />
@@ -131,7 +135,6 @@
     <None Include="skyboxShader.vert" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\ActionObject .cpp" />
     <ClCompile Include="..\camera.cpp" />
     <ClCompile Include="..\CollidableObject.cpp" />
     <ClCompile Include="..\control.cpp" />
@@ -147,7 +150,6 @@
     <ClCompile Include="..\Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\ActionObject.h" />
     <ClInclude Include="..\camera.h" />
     <ClInclude Include="..\CollidableObject.h" />
     <ClInclude Include="..\Cone.h" />

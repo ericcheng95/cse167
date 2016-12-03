@@ -1,6 +1,5 @@
 #include "main.h"
 #include "PrimaryWindow.h"
-#include "ActionObject.h"
 
 float lastFrameElapsedSeconds();
 void error_callback(int error, const char* description);
@@ -16,8 +15,6 @@ int main(void)
 		PrimaryWindow::display_callback();
 		
 		glfwPollEvents();
-		
-		ActionObject::allPerformActions(secondsElapsed);
 
 		secondsElapsed = lastFrameElapsedSeconds();
 	}
@@ -31,15 +28,15 @@ int main(void)
 }
 
 
-void printFPS(long long duration)
+void printFPS(float duration)
 {
-	static long long totalDuration = 0;
-	static long frames = 0;
+	static float totalDuration = 0;
+	static int frames = 0;
 	frames++;
 	totalDuration += duration;
-	if (totalDuration > 1000000000)
+	if (totalDuration > 1.0f)
 	{
-		cout << "FPS: " << frames * 1000000000.0 / totalDuration << endl;
+		cout << "FPS: " << frames / totalDuration << endl;
 		frames = 0;
 		totalDuration = 0;
 	}
@@ -47,12 +44,12 @@ void printFPS(long long duration)
 
 float lastFrameElapsedSeconds()
 {
-	static time_point<system_clock> lastTime = system_clock::now();
-	auto thisTime = system_clock::now();
-	long long duration = duration_cast<nanoseconds>(thisTime - lastTime).count();
+	static float lastTime = glfwGetTime();
+	auto thisTime = glfwGetTime();
+	float duration = thisTime - lastTime;
 	lastTime = thisTime;
 	printFPS(duration);
-	return (float)(duration / 1000000000.0);
+	return duration;
 }
 
 void error_callback(int error, const char* description)

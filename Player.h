@@ -1,9 +1,7 @@
 #pragma once
 #include "main.h"
-#include "ActionObject.h"
 
-class Player : public ActionObject
+class Player
 {
-public:
-	void act(float elapsedSeconds) override;
+
 };

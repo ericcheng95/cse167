@@ -7,24 +7,36 @@ vec3 Camera::cam_up(0.0f, 1.0f, 0.0f);
 vec3 Camera::cam_right(1.0f, 0.0f, 0.0f);
 vec3 Camera::cameraFrustumNormalLeft, Camera::cameraFrustumNormalRight, Camera::cameraFrustumNormalTop, Camera::cameraFrustumNormalBottom, Camera::cameraFrustumNormalNear, Camera::cameraFrustumNormalFar;
 vec3 Camera::cameraFrustumPointLeft, Camera::cameraFrustumPointRight, Camera::cameraFrustumPointTop, Camera::cameraFrustumPointBottom, Camera::cameraFrustumPointNear, Camera::cameraFrustumPointFar;
-
-int Camera::uProjection, Camera::uView, Camera::uCamera;
+vector<int> Camera::uniformLocations;
 
 mat4 Camera::P;
 mat4 Camera::V;
 
-void Camera::init(unsigned int shader)
+void Camera::init()
 {
-	uProjection = glGetUniformLocation(shader, "projection");
-	uView = glGetUniformLocation(shader, "view");
-	uCamera = glGetUniformLocation(shader, "cameraPos");
+	uniformLocations.push_back(glGetUniformLocation(PrimaryWindow::shader, "projection"));
+	uniformLocations.push_back(glGetUniformLocation(PrimaryWindow::shader, "view"));
+	uniformLocations.push_back(glGetUniformLocation(PrimaryWindow::shader, "cameraPos"));
+	uniformLocations.push_back(glGetUniformLocation(PrimaryWindow::dGeometryShader, "projection"));
+	uniformLocations.push_back(glGetUniformLocation(PrimaryWindow::dGeometryShader, "view"));
+	uniformLocations.push_back(glGetUniformLocation(PrimaryWindow::dLightingShader, "cameraPos"));
 }
 
-void Camera::enable()
+void Camera::enable(unsigned int shader)
 {
-	glUniformMatrix4fv(uProjection, 1, GL_FALSE, &P[0][0]);
-	glUniformMatrix4fv(uView, 1, GL_FALSE, &V[0][0]);
-	glUniform3fv(uCamera, 1, &cam_pos[0]);
+	if (shader == PrimaryWindow::shader){
+		glUniformMatrix4fv(uniformLocations[0], 1, GL_FALSE, &P[0][0]);
+		glUniformMatrix4fv(uniformLocations[1], 1, GL_FALSE, &V[0][0]);
+		glUniform3fv(uniformLocations[2], 1, &cam_pos[0]);
+	}
+	else if (shader == PrimaryWindow::dGeometryShader) {
+		glUniformMatrix4fv(uniformLocations[3], 1, GL_FALSE, &P[0][0]);
+		glUniformMatrix4fv(uniformLocations[4], 1, GL_FALSE, &V[0][0]);
+	}
+	else if (shader == PrimaryWindow::dLightingShader)
+	{
+		glUniform3fv(uniformLocations[5], 1, &cam_pos[0]);
+	}
 }
 
 void Camera::reset()

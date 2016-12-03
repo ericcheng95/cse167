@@ -14,7 +14,7 @@ public:
 	static GLFWwindow* window;
 	static int width;
 	static int height;
-	static unsigned int shader;
+	static unsigned int shader, dGeometryShader, dLightingShader;
 	static unsigned int selectionShader;
 
 
