@@ -55,8 +55,6 @@ out vec4 color;
 
 void main()
 {
-	color = vec4(material.diffuseCoeff, 1.0f);
-	return;
 
 	color = texture(texture2D, TexCoords);
 	vec3 norm = normalize(Normal);

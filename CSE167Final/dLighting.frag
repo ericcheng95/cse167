@@ -40,7 +40,7 @@ void main()
     float Specular = texture(gAlbedoSpec, TexCoords).a;
 
 	if (Normal.x == 0 && Normal.y == 0 && Normal.z == 0){
-		FragColor = vec4(0,0, 0, 0);
+		FragColor = vec4(0,0,0,0);
 	}
 	else {
 		vec3 viewDir  = normalize(cameraPos - FragPos);
@@ -48,7 +48,7 @@ void main()
 		vec3 ambient  = directionalLight.ambient;
 		vec3 diffuse = max(dot(Normal, lightDir), 0.0f) * Diffuse * directionalLight.diffuse;
 		vec3 halfway = normalize(viewDir + lightDir);
-		vec3 specular = directionalLight.specular * pow(max(dot(Normal, halfway), 0.0f), 16.0) * Specular;
+		vec3 specular = directionalLight.specular * pow(max(dot(halfway, Normal), 0.0f), Specular * 10.0f);//16.0) * Specular;
 		FragColor = vec4(ambient + diffuse + specular, 1.0f);
 	}
 	

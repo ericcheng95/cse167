@@ -138,14 +138,12 @@ void PrimaryWindow::display_callback()
 	Geode::scene->draw(mat4(1.0f), dGeometryShader);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-
-	glfwSwapBuffers(window);
 	/*TODO: GeometryShader is generating right values, but saving to texture and then reading in LightingBuffer does not work*/
 
 	// 2. Lighting Pass: calculate lighting by iterating over a screen filled quad pixel-by-pixel using the gbuffer's content.
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	skybox->draw(Camera::V);
+	
 
 	glUseProgram(dLightingShader);
 	Camera::enable(dLightingShader); //Must be called after correct use program
@@ -167,6 +165,10 @@ void PrimaryWindow::display_callback()
 	// Finally render quad
 	RenderQuad();
 
+
+	skybox->draw(Camera::V);
+	
+	
 	glfwSwapBuffers(window);
 }
 

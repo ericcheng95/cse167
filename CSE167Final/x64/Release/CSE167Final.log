@@ -1,10 +1,12 @@
-﻿  ActionObject .cpp
-  camera.cpp
+﻿  camera.cpp
   CollidableObject.cpp
   control.cpp
   Geode.cpp
   Light.cpp
   main.cpp
+..\main.cpp(47): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+..\main.cpp(49): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+..\main.cpp(50): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   Model.cpp
   Player.cpp
   PrimaryWindow.cpp
@@ -13,7 +15,9 @@
   skybox.cpp
   Sphere.cpp
   Generating code
-  All 715 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  139 of 740 functions (18.8%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    7 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
-  CSE167Final.vcxproj -> C:\Users\eric_\Desktop\CSE 167\Final Project\cse167\x64\Release\CSE167Final.exe
-  CSE167Final.vcxproj -> C:\Users\eric_\Desktop\CSE 167\Final Project\cse167\x64\Release\CSE167Final.pdb (Full PDB)
+  CSE167Final.vcxproj -> C:\Users\SouICry\Desktop\cse167\CSE167Final\x64\Release\CSE167Final.exe
+  CSE167Final.vcxproj -> C:\Users\SouICry\Desktop\cse167\CSE167Final\x64\Release\CSE167Final.pdb (Full PDB)
