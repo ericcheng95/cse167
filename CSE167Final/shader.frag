@@ -56,6 +56,9 @@ out vec4 color;
 
 void main()
 {
+	color = vec4(normalize(Normal), 1.0f);
+	return;
+
 	color = texture(texture2D, TexCoords);
 	vec3 norm = normalize(Normal);
 	vec3 viewDir = normalize(cameraPos - FragPos);
@@ -64,7 +67,7 @@ void main()
 
 	vec3 lightDir = normalize(-directionalLight.direction);
 	vec3 ambient  = directionalLight.ambient * material.ambientCoeff;
-	vec3 diffuse = directionalLight.diffuse * max(dot(norm, lightDir), 0.0f) * material.diffuseCoeff;
+	vec3 diffuse = max(dot(norm, lightDir), 0.0f) * material.diffuseCoeff * directionalLight.diffuse;
 	vec3 halfway = normalize(viewDir + lightDir);
 	vec3 specular = directionalLight.specular * pow(max(dot(halfway, norm), 0.0f), material.specularExp);
 	color += vec4(ambient + diffuse + specular, 1.0f);
@@ -75,7 +78,7 @@ void main()
 		vec3 lightDir = normalize(lightVector);
 
 		vec3 ambient  = pointLight.ambient * material.ambientCoeff;
-		vec3 diffuse = pointLight.diffuse * max(dot(norm, lightDir),  0.0f) * material.diffuseCoeff;
+		vec3 diffuse = max(dot(norm, lightDir),  0.0f) * material.diffuseCoeff * pointLight.diffuse;
 		vec3 halfway = normalize(viewDir + lightDir);
 		vec3 specular = pointLight.specular * pow(max(dot(halfway, norm), 0.0f), material.specularExp);
 		float distance = length(lightVector);

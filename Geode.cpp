@@ -15,7 +15,7 @@ Geode* Geode::scene = new Geode();
 
 int Geode::uModel, Geode::uDiffuse, Geode::uSpecular, Geode::uAmbient, Geode::uReflectivity;
 
-void Geode::draw(mat4 C, unsigned int shaderProgram)
+void Geode::draw(mat4 C, unsigned int shader)
 {
 	mat4 CM = C * M;
 	// Cull if out of bounds
@@ -33,17 +33,17 @@ void Geode::draw(mat4 C, unsigned int shaderProgram)
 	}
 
 	if (model != nullptr) {
-		glUniformMatrix4fv(uModel, 1, GL_FALSE, &CM[0][0]);
-		glUniform3fv(uDiffuse, 1, &material->diffuseCoeff[0]);
-		glUniform1f(uSpecular, material->specularExp);
-		glUniform3fv(uAmbient, 1, &material->ambientCoeff[0]);
-		glUniform1f(uReflectivity, material->reflectivity);
+		glUniformMatrix4fv(glGetUniformLocation(shader, "model"), 1, GL_FALSE, &CM[0][0]);
+		glUniform3fv(glGetUniformLocation(shader, "material.diffuseCoeff"), 1, &material->diffuseCoeff[0]);
+		glUniform1f(glGetUniformLocation(shader, "material.specularExp"), material->specularExp);
+		glUniform3fv(glGetUniformLocation(shader, "material.ambientCoeff"), 1, &material->ambientCoeff[0]);
+		glUniform1f(glGetUniformLocation(shader, "material.reflectivity"), material->reflectivity);
 		model->draw();
 	}
 
 	for (auto it = children.begin(); it != children.end(); it++)
 	{
-		(*it)->draw(CM, shaderProgram);
+		(*it)->draw(CM, shader);
 	}
 }
 

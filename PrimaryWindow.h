@@ -17,8 +17,8 @@ public:
 	static unsigned int shader, dGeometryShader, dLightingShader;
 	static unsigned int selectionShader;
 
-
 	static GLuint gBuffer;
+	static GLuint gPosition, gNormal, gAlbedoSpec;
 
 
 	static bool enableCulling;
@@ -29,7 +29,10 @@ public:
 	static void display_callback();
 	static void resize_callback(GLFWwindow* window, int width, int height);
 
-	
+	//From LearnOpenGL: http://www.learnopengl.com/code_viewer.php?code=advanced-lighting/bloom
+	//Call opengl to render from texture sampler2D/samplerCube
+	static void RenderQuad();
+	static void RenderCube();
 private:
 	static void genGBuffer();
 };

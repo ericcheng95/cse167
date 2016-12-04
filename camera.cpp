@@ -20,6 +20,7 @@ void Camera::init()
 	uniformLocations.push_back(glGetUniformLocation(PrimaryWindow::dGeometryShader, "projection"));
 	uniformLocations.push_back(glGetUniformLocation(PrimaryWindow::dGeometryShader, "view"));
 	uniformLocations.push_back(glGetUniformLocation(PrimaryWindow::dLightingShader, "cameraPos"));
+	uniformLocations.push_back(glGetUniformLocation(PrimaryWindow::dGeometryShader, "cameraPos"));
 }
 
 void Camera::enable(unsigned int shader)
@@ -32,6 +33,7 @@ void Camera::enable(unsigned int shader)
 	else if (shader == PrimaryWindow::dGeometryShader) {
 		glUniformMatrix4fv(uniformLocations[3], 1, GL_FALSE, &P[0][0]);
 		glUniformMatrix4fv(uniformLocations[4], 1, GL_FALSE, &V[0][0]);
+		glUniform3fv(uniformLocations[6], 1, &cam_pos[0]);
 	}
 	else if (shader == PrimaryWindow::dLightingShader)
 	{

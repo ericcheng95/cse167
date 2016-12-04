@@ -12,7 +12,7 @@ void Light::init()
 	//	Light::spotLights.push_back({ vec3(0, -1, 0), vec3(0, 12, 0), vec3(1, 1, 1), vec3(1, 1, 1), vec3(1, 1, 1), 0.02f, 3.1415f / 72.0f ,64 });
 }
 
-void Light::drawLights(unsigned int shader)
+void Light::enable(unsigned int shader)
 {
 	glUniform3fv(glGetUniformLocation(shader, "directionalLight.direction"), 1, &directionalLights[0].direction[0]);
 	glUniform3fv(glGetUniformLocation(shader, "directionalLight.ambient"), 1, &directionalLights[0].ambient[0]);

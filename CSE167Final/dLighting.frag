@@ -6,6 +6,18 @@ uniform sampler2D gPosition;
 uniform sampler2D gNormal;
 uniform sampler2D gAlbedoSpec;
 
+uniform vec3 cameraPos;
+
+struct DirectionalLight
+{
+	vec3 direction;
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
+};
+uniform DirectionalLight directionalLight;
+
+/*
 struct Light {
     vec3 Position;
     vec3 Color;
@@ -15,16 +27,30 @@ struct Light {
 };
 const int NR_LIGHTS = 32;
 uniform Light lights[NR_LIGHTS];
-uniform vec3 cameraPos;
+*/
 
 void main()
-{             
+{   
+
+
     // Retrieve data from gbuffer
     vec3 FragPos = texture(gPosition, TexCoords).rgb;
     vec3 Normal = texture(gNormal, TexCoords).rgb;
     vec3 Diffuse = texture(gAlbedoSpec, TexCoords).rgb;
     float Specular = texture(gAlbedoSpec, TexCoords).a;
-    
+
+	FragColor = vec4(FragPos, 1.0f);
+	return;
+	vec3 viewDir  = normalize(cameraPos - FragPos);
+	vec3 lightDir = normalize(-directionalLight.direction);
+	vec3 ambient  = directionalLight.ambient;
+	vec3 diffuse = max(dot(Normal, lightDir), 0.0f) * Diffuse * directionalLight.diffuse;
+	vec3 halfway = normalize(viewDir + lightDir);
+	vec3 specular = directionalLight.specular * pow(max(dot(Normal, halfway), 0.0f), 16.0) * Specular;
+	FragColor = vec4(ambient + diffuse + specular, 1.0f);
+
+	
+/*
     // Then calculate lighting as usual
     vec3 lighting  = Diffuse * 0.1; // hard-coded ambient component
     vec3 viewDir  = normalize(cameraPos - FragPos);
@@ -45,4 +71,5 @@ void main()
         lighting += diffuse + specular;
     }    
     FragColor = vec4(lighting, 1.0);
+*/
 }

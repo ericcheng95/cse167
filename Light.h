@@ -38,7 +38,7 @@ public:
 	static vector<SpotLight> spotLights;
 	
 	static void init();
-	static void drawLights(unsigned int shader);
+	static void enable(unsigned int shader);
 
 };
 
