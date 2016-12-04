@@ -70,7 +70,6 @@ private:
 			strcat(faces[i], namePrefix);
 			strcat(faces[i], ".bmp");
 		}
-		cout << faces[0] << endl;
 		for (GLuint i = 0; i < 6; i++)
 		{
 			Image image(faces[i]);

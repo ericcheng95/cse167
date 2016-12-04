@@ -17,18 +17,6 @@ struct DirectionalLight
 };
 uniform DirectionalLight directionalLight;
 
-/*
-struct Light {
-    vec3 Position;
-    vec3 Color;
-    
-    float Linear;
-    float Quadratic;
-};
-const int NR_LIGHTS = 32;
-uniform Light lights[NR_LIGHTS];
-*/
-
 void main()
 {   
 
@@ -51,28 +39,4 @@ void main()
 		vec3 specular = directionalLight.specular * pow(max(dot(halfway, Normal), 0.0f), Specular * 10.0f);//16.0) * Specular;
 		FragColor = vec4(ambient + diffuse + specular, 1.0f);
 	}
-	
-	
-/*
-    // Then calculate lighting as usual
-    vec3 lighting  = Diffuse * 0.1; // hard-coded ambient component
-    vec3 viewDir  = normalize(cameraPos - FragPos);
-    for(int i = 0; i < NR_LIGHTS; ++i)
-    {
-        // Diffuse
-        vec3 lightDir = normalize(lights[i].Position - FragPos);
-        vec3 diffuse = max(dot(Normal, lightDir), 0.0) * Diffuse * lights[i].Color;
-        // Specular
-        vec3 halfwayDir = normalize(lightDir + viewDir);  
-        float spec = pow(max(dot(Normal, halfwayDir), 0.0), 16.0);
-        vec3 specular = lights[i].Color * spec * Specular;
-        // Attenuation
-        float distance = length(lights[i].Position - FragPos);
-        float attenuation = 1.0 / (1.0 + lights[i].Linear * distance + lights[i].Quadratic * distance * distance);
-        diffuse *= attenuation;
-        specular *= attenuation;
-        lighting += diffuse + specular;
-    }    
-    FragColor = vec4(lighting, 1.0);
-*/
 }

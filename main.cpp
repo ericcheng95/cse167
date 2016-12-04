@@ -13,8 +13,8 @@ int main(void)
 {
 	ISoundEngine* engine = createIrrKlangDevice();
 	ISoundSource* bgm = engine->addSoundSourceFromFile("getout.ogg");
-
-	engine->play2D(bgm, true);
+	bgm->setDefaultVolume(0.3);
+	//engine->play2D(bgm, true);
 
 	glfwSetErrorCallback(error_callback);
 
