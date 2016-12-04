@@ -7,7 +7,7 @@ void StaticCollidableGeode::add(Geode* geode)
 	all.push_back(new StaticCollidableGeode(geode));
 }
 
-vector<vector<GLfloat>*>* StaticCollidableGeode::collide(Geode* other)
+vector<Face*>* StaticCollidableGeode::collide(Geode* other)
 {
 	vector<Geode*>* possible = new vector<Geode*>();
 	for (auto it = all.begin(); it != all.end(); ++it)
@@ -15,23 +15,85 @@ vector<vector<GLfloat>*>* StaticCollidableGeode::collide(Geode* other)
 		getPossibles(possible, (*it)->geode, other);
 	}
 
-	//https://gamedev.stackexchange.com/questions/44500/how-many-and-which-axes-to-use-for-3d-obb-collision-with-sat
-	//SAT to determine separation
-
-	//AND/OR
-
-	//To find the planes: intersect segments and faces by projecting onto normal. If any segment has endpoints on both sides, then 
+	//	//https://gamedev.stackexchange.com/questions/44500/how-many-and-which-axes-to-use-for-3d-obb-collision-with-sat
+	//	//SAT to determine separation
+	//To find the planes my thoughts: intersect segments and faces by projecting onto normal. If any segment has endpoints on both sides, then 
 	//check that the intersection point http://www.ambrsoft.com/TrigoCalc/Plan3D/PlaneLineIntersection_.htm is within the triangle.
 	//That face and the 2 faces around the segment are colliding.
 
-	for (auto it = possible->begin(); it != possible->end(); ++it) {
+	vector<Face*>* intersecting = new vector<Face*>();
+	mat4& CM = other->M; //Other is directly attached to world
+	for (auto it = possible->begin(); it != possible->end(); ++it)
+	{
 		Geode* p = *it;
-		//TODO: take p segments/faces and other segments/faces and pairwise check intersect to get all intersecting faces/segments
-		//Other face/segments need to be multiplied by M beware (only needed for collide, so only need to do it as many times as collision check)
+		for (auto f = p->faces->begin(); f != p->faces->end(); ++f)
+		{
+			Face* face = *f;
+			for (auto s = other->segments->begin(); s != other->segments->end(); ++s)
+			{
+				Segment* segment = transformSegment(*s, CM);
+				if (faceAndSegmentIntersect(face, segment))
+				{
+					intersecting->push_back(face);
+					Face* f1 = (*other->faces)[segment->f1];
+					if (f1 != nullptr)
+					{
+						intersecting->push_back(transformFace(f1, CM));
+					}
+					Face* f2 = (*other->faces)[segment->f2];
+					if (f2 != nullptr)
+					{
+						intersecting->push_back(transformFace(f2, CM));
+					}
+				}
+			}
+		}
+		for (auto f = other->faces->begin(); f != other->faces->end(); ++f)
+		{
+			Face* face = transformFace(*f, CM);
+			for (auto s = p->segments->begin(); s != p->segments->end(); ++s)
+			{
+				Segment* segment = *s;
+				if (faceAndSegmentIntersect(face, segment))
+				{
+					intersecting->push_back(face);
+					Face* f1 = (*p->faces)[segment->f1];
+					if (f1 != nullptr)
+					{
+						intersecting->push_back(f1);
+					}
+					Face* f2 = (*p->faces)[segment->f2];
+					if (f2 != nullptr)
+					{
+						intersecting->push_back(f2);
+					}
+				}
+			}
+		}
 	}
-
+	return intersecting;
 }
 
+
+Segment* StaticCollidableGeode::transformSegment(Segment* segment, mat4& CM)
+{
+	return new Segment{
+		vec3(CM * vec4(segment->a, 1.0f)),
+		vec3(CM * vec4(segment->b, 1.0f)),
+		segment->f1,
+		segment->f2
+	};
+}
+
+Face* StaticCollidableGeode::transformFace(Face* face, mat4& CM)
+{
+	return new Face{
+		vec3(CM * vec4(face->a, 1.0f)),
+		vec3(CM * vec4(face->b, 1.0f)),
+		vec3(CM * vec4(face->c, 1.0f)),
+		vec3(CM * vec4(face->normal, 1.0f))
+	};
+}
 
 
 void StaticCollidableGeode::getPossibles(vector<Geode*>* possible, Geode* g, Geode* other)
@@ -49,7 +111,7 @@ void StaticCollidableGeode::getPossibles(vector<Geode*>* possible, Geode* g, Geo
 	}
 }
 
-StaticCollidableGeode::StaticCollidableGeode(Geode* geode):geode(geode)
+StaticCollidableGeode::StaticCollidableGeode(Geode* geode): geode(geode)
 {
 	geode->computeFaceSegments();
 }
@@ -77,9 +139,14 @@ bool StaticCollidableGeode::withinModel(vec4 vec, Geode* m)
 	return vec.x <= m->modelMaxPos.x && vec.y <= m->modelMaxPos.y && vec.z <= m->modelMaxPos.z && vec.x >= m->modelMinPos.x && vec.y >= m->modelMinPos.y && vec.z >= m->modelMinPos.z;
 }
 
-bool StaticCollidableGeode::faceAndSegmentIntersect(vec3 sa, vec3 sb, vec3 n, vec3 a, vec3 b, vec3 c)
+bool StaticCollidableGeode::faceAndSegmentIntersect(Face* face, Segment* segment)
 {
-
+	vec3 sa = segment->a;
+	vec3 sb = segment->b;
+	vec3 n = face->normal;
+	vec3 a = face->a;
+	vec3 b = face->b;
+	vec3 c = face->c;
 	//If segment not cross face or at least on face(on both sides of face plane), return false. use origin as the point on face, so no need subtract
 	if (dot(n, sa) * dot(n, sb) > 0)
 	{

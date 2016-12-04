@@ -17,9 +17,9 @@ public:
 	static list<StaticCollidableGeode*> all;
 	static void add(Geode* geode);
 
-	//Returns all colliding <face normals><face vertices to draw (moved in direction of normal slightly)>
+	//Returns all colliding faces to draw for all static collidables with the non-static other object (faces need be moved in direction of normal slightly)>
 	//Other geode must have no children (only a model) and must be directly attached to world.
-	static vector<vector<GLfloat>*>* collide(Geode* other);
+	static vector<Face*>* collide(Geode* other);
 private:
 
 	Geode* geode;
@@ -33,5 +33,8 @@ private:
 	static bool withinModel(vec4 vec, Geode* m);
 
 
-	static bool faceAndSegmentIntersect(vec3 sa, vec3 sb, vec3 n, vec3 a, vec3 b, vec3 c);
+	static bool faceAndSegmentIntersect(Face* face, Segment* segment);
+
+	static Segment* transformSegment(Segment* segment, mat4& CM);
+	static Face* transformFace(Face* face, mat4& CM);
 };
