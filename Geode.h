@@ -27,12 +27,19 @@ public:
 	list<Geode*> children;
 	list<Geode*> parents;
 	mat4 M;
+	Model* model;
 	
 	vec4 minPos = vec4(999999.9f, 999999.9f, 999999.9f, 1.0f);
 	vec4 maxPos = vec4(-999999.9f, -999999.9f, -999999.9f, 1.0f);
+
+	vec4 modelMinPos;
+		vec4 modelMaxPos;
 	vec4 center;
 	float boundingRadius;
 	bool enableCulling = true;
+
+	vector<Face*>* faces;
+	vector<Segment*>* segments;
 
 	Geode();
 	Geode(Material* mat);
@@ -52,9 +59,10 @@ public:
 	void add(Geode* geode);
 	void translate(vec3 t);
 
+
+	void computeFaceSegments();
+
 private:
 
-	Model* model;
 	void findMinMax(vec4 min, vec4 max);
-	void findParentMinMax();
 };

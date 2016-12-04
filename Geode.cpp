@@ -8,7 +8,7 @@ Material* Geode::defaultMaterial = new Material{
 	vec3(0.6f, 0.6f, 0.6f),
 	10.0f,
 	vec3(0.2f, 0.2f, 0.2f),
-	0.0f };
+	0.0f};
 
 int Geode::geodeCounter = 1;
 Geode* Geode::scene = new Geode();
@@ -19,7 +19,8 @@ void Geode::draw(mat4 C, unsigned int shader)
 {
 	mat4 CM = C * M;
 	// Cull if out of bounds
-	if (PrimaryWindow::enableCulling && enableCulling) {
+	if (PrimaryWindow::enableCulling && enableCulling)
+	{
 		vec3 v = vec3(CM * center);
 		if (dot((v - Camera::cameraFrustumPointLeft), Camera::cameraFrustumNormalLeft) > boundingRadius
 			|| dot((v - Camera::cameraFrustumPointRight), Camera::cameraFrustumNormalRight) > boundingRadius
@@ -32,7 +33,8 @@ void Geode::draw(mat4 C, unsigned int shader)
 		}
 	}
 
-	if (model != nullptr) {
+	if (model != nullptr)
+	{
 		glUniformMatrix4fv(glGetUniformLocation(shader, "model"), 1, GL_FALSE, &CM[0][0]);
 		glUniform3fv(glGetUniformLocation(shader, "material.diffuseCoeff"), 1, &material->diffuseCoeff[0]);
 		glUniform1f(glGetUniformLocation(shader, "material.specularExp"), material->specularExp);
@@ -51,7 +53,8 @@ void Geode::draw(mat4 C, unsigned int shader)
 Geode::Geode(Model* m, Material* mat, mat4 M) : model(m), material(mat), M(M)
 {
 	id = geodeCounter++;
-	if (m != nullptr) {
+	if (m != nullptr)
+	{
 		findMinMax(vec4(m->minX, m->minY, m->minZ, 1.0f), vec4(m->maxX, m->maxY, m->maxZ, 1.0f));
 	}
 }
@@ -96,7 +99,6 @@ void Geode::reset()
 void Geode::set(mat4 m)
 {
 	M = m;
-	findParentMinMax();
 }
 
 void Geode::add(Geode* geode)
@@ -117,10 +119,44 @@ void Geode::translate(vec3 t)
 	translate(glm::translate(t));
 }
 
+void Geode::computeFaceSegments()
+{
+	mat4 CM = M;
+	list<Geode*>& p = parents;
+	while (p.size() != 0)
+	{
+		Geode* g = *p.begin();
+		CM = g->M * CM;
+		p = g->parents;
+	}
+
+
+	modelMinPos = CM * vec4(model->minX, model->minY, model->minZ, 1.0f);
+	modelMaxPos = CM * vec4(model->maxX, model->maxY, model->maxZ, 1.0f);
+
+
+	int f = model->faces.size();
+	int s = model->segments.size();
+	vector<Face*>& mf = model->faces;
+	vector<Segment*>& ms = model->segments;
+
+	faces = new vector<Face*>(f);
+	segments = new vector<Segment*>(s);
+	for (int i = 0; i < f; i++)
+	{
+		Face* o = mf[i];
+		faces->push_back(new Face{vec3(CM * vec4(o->a, 1.0f)), vec3(CM * vec4(o->b, 1.0f)), vec3(CM * vec4(o->c, 1.0f)), vec3(CM * vec4(o->normal, 1.0f))});
+	}
+	for (int i = 0; i < s; i++)
+	{
+		Segment* o = ms[i];
+		segments->push_back(new Segment{vec3(CM * vec4(o->a, 1.0f)), vec3(CM * vec4(o->b, 1.0f)), o->f1, o->f2});
+	}
+}
+
 void Geode::translate(mat4 T)
 {
 	M = T * M;
-	findParentMinMax();
 }
 
 void Geode::scale(float amountX, float amountY, float amountZ)
@@ -140,7 +176,8 @@ void Geode::rotate(mat4 R)
 
 void Geode::findMinMax(vec4 min, vec4 max)
 {
-	if (enableCulling) {
+	if (enableCulling)
+	{
 		if (min.x < minPos.x)
 		{
 			minPos.x = min.x;
@@ -172,13 +209,5 @@ void Geode::findMinMax(vec4 min, vec4 max)
 		{
 			findMinMax(M * minPos, M * maxPos);
 		}
-	}
-}
-
-void Geode::findParentMinMax()
-{
-	for (auto it = parents.begin(); it != parents.end(); it++)
-	{
-		findMinMax(M * minPos, M * maxPos);
 	}
 }

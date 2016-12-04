@@ -1,6 +1,6 @@
 #include "Model.h"
 
-Model::Model(vector<GLfloat>& vertices, vector<GLfloat>& normals, vector<GLuint>& faceVertexIndices)
+Model::Model(vector<GLfloat>& vertices, vector<GLfloat>& normals, vector<GLuint>& faceVertexIndices):vertices(vertices), normals(normals), faceVertexIndices(faceVertexIndices)
 {
 	findMinMax(vertices);
 
@@ -28,25 +28,27 @@ Model::Model(vector<GLfloat>& vertices, vector<GLfloat>& normals, vector<GLuint>
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+
+	computeFaceSegments();
 }
 
-void Model::updateData(vector<GLfloat>& vertices, vector<GLfloat>& normals)
-{
-	findMinMax(vertices);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(GLfloat), &vertices[0]);
-	glBindBuffer(GL_ARRAY_BUFFER, VBON);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, normals.size() * sizeof(GLfloat), &normals[0]);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
-void Model::updateData(vector<GLfloat>& vertices)
-{
-	findMinMax(vertices);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(GLfloat), &vertices[0]);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
+//void Model::updateData(vector<GLfloat>& vertices, vector<GLfloat>& normals)
+//{
+//	findMinMax(vertices);
+//	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+//	glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(GLfloat), &vertices[0]);
+//	glBindBuffer(GL_ARRAY_BUFFER, VBON);
+//	glBufferSubData(GL_ARRAY_BUFFER, 0, normals.size() * sizeof(GLfloat), &normals[0]);
+//	glBindBuffer(GL_ARRAY_BUFFER, 0);
+//}
+//
+//void Model::updateData(vector<GLfloat>& vertices)
+//{
+//	findMinMax(vertices);
+//	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+//	glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(GLfloat), &vertices[0]);
+//	glBindBuffer(GL_ARRAY_BUFFER, 0);
+//}
 
 Model::Model(char* filepath):Model(filepath, nullptr)
 {
@@ -55,8 +57,6 @@ Model::Model(char* filepath):Model(filepath, nullptr)
 
 Model::Model(char* filepath, Texture* texture):texture(texture)
 {
-	vector<GLfloat> vertices, normals, textures;
-	vector<GLuint> faceVertexIndices, textureIndices;
 	FILE* fp; // file pointer
 	GLfloat x, y, z, u, v; // vertex/texture coordinates
 	GLuint xi, yi, zi, xn, yn, zn, xt, yt, zt; // vertex color
@@ -118,6 +118,8 @@ Model::Model(char* filepath, Texture* texture):texture(texture)
 
 	findMinMax(vertices);
 
+	
+
 	count = (int)(faceVertexIndices.size());
 
 	glGenVertexArrays(1, &VAO);
@@ -153,6 +155,8 @@ Model::Model(char* filepath, Texture* texture):texture(texture)
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+
+	computeFaceSegments();
 }
 
 
@@ -204,6 +208,68 @@ void Model::findMinMax(vector<GLfloat>& vertices)
 		else if (vertices[i] > maxZ)
 		{
 			maxZ = vertices[i];
+		}
+	}
+}
+
+void Model::computeFaceSegments()
+{
+
+	int count = vertices.size() / 3;
+	vector<Segment*> map(count * count);
+	for (int i = 0; i < faceVertexIndices.size(); i+=3)
+	{
+		int i1 = faceVertexIndices[i] * 3;
+		int i2 = faceVertexIndices[i+1] * 3;
+		int i3 = faceVertexIndices[i+2] * 3;
+		vec3 a = vec3(vertices[i1], vertices[i1 + 1], vertices[i1 + 2]);
+		vec3 b = vec3(vertices[i2], vertices[i2 + 1], vertices[i2 + 2]);
+		vec3 c = vec3(vertices[i3], vertices[i3 + 1], vertices[i3 + 2]);
+		Face* f = new Face{ a,b,c, cross(a-b, c-b)};
+		int index = faces.size();
+		faces.push_back(f);
+		
+		if (map[i1*count + i2] == nullptr)
+		{
+			Segment* s = new Segment();
+			s->a = a;
+			s->b = b;
+			s->f1 = index;
+			s->f2 = -1;
+			map[i1*count + i2] = s;
+			segments.push_back(s);
+		}
+		else
+		{
+			map[i1*count + i2]->f2 = index;
+		}
+		if (map[i2*count + i3] == nullptr)
+		{
+			Segment* s = new Segment();
+			s->a = b;
+			s->b = c;
+			s->f1 = index;
+			s->f2 = -1;
+			map[i2*count + i3] = s;
+			segments.push_back(s);
+		}
+		else
+		{
+			map[i2*count + i3]->f2 = index;
+		}
+		if (map[i3*count + i1] == nullptr)
+		{
+			Segment* s = new Segment();
+			s->a = c;
+			s->b = a;
+			s->f1 = index;
+			s->f2 = -1;
+			map[i3*count + i1] = s;
+			segments.push_back(s);
+		}
+		else
+		{
+			map[i3*count + i1]->f2 = index;
 		}
 	}
 }

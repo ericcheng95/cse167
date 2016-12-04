@@ -64,7 +64,7 @@
     <ClCompile Include="..\control.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\CollidableObject.cpp">
+    <ClCompile Include="..\StaticCollidableGeode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -126,7 +126,10 @@
     <ClInclude Include="..\control.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\CollidableObject.h">
+    <ClInclude Include="..\StaticCollidableGeode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Face.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
