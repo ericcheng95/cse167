@@ -47,7 +47,6 @@ uniform SpotLight spotLights[SPOT_LIGHT_COUNT+1];
 in vec3 FragPos;
 in vec3 Normal;
 in vec2 TexCoords;
-
 uniform vec3 cameraPos;
 //uniform samplerCube skybox;
 uniform sampler2D texture2D;
@@ -56,7 +55,7 @@ out vec4 color;
 
 void main()
 {
-	color = vec4(normalize(Normal), 1.0f);
+	color = vec4(material.diffuseCoeff, 1.0f);
 	return;
 
 	color = texture(texture2D, TexCoords);

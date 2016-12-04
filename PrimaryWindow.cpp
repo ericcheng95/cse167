@@ -69,9 +69,6 @@ void PrimaryWindow::init(int width, int height, char* title)
 	shader = LoadShaders("shader.vert", "shader.frag");
 	dGeometryShader = LoadShaders("dGeometry.vert", "dGeometry.frag");
 	dLightingShader = LoadShaders("dLighting.vert", "dLighting.frag");
-	glUniform1i(glGetUniformLocation(dLightingShader, "gPosition"), 0);
-	glUniform1i(glGetUniformLocation(dLightingShader, "gNormal"), 1);
-	glUniform1i(glGetUniformLocation(dLightingShader, "gAlbedoSpec"), 2);
 	genGBuffer();
 
 	//Initialize stuff
@@ -99,41 +96,42 @@ void PrimaryWindow::init(int width, int height, char* title)
 
 void PrimaryWindow::display_callback()
 {
-	//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//
-	//	skybox->draw(Camera::V);
-	//
-	//	glUseProgram(shader);
-	//
-	//	Camera::enable(shader);
-	//
-	//	Light::enable(shader);
-	//
-	//	Geode::scene->draw(mat4(1.0f), shader);
-	//
-	//	glfwSwapBuffers(window);
+//		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//	
+//		skybox->draw(Camera::V);
+//	
+//		glUseProgram(shader);
+//	
+//		Camera::enable(shader);
+//	
+//		Light::enable(shader);
+//	
+//		Geode::scene->draw(mat4(1.0f), shader);
+//	
+//		glfwSwapBuffers(window);
+//	return;
 
 
-	//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//
-	//	skybox->draw(Camera::V);
-	//
-	//	glUseProgram(dGeometryShader);
-	//
-	//	Camera::enable(dGeometryShader);
-	//
-	//	Light::enable(dGeometryShader);
-	//
-	//	Geode::scene->draw(mat4(1.0f), dGeometryShader);
-	//
-	//	glfwSwapBuffers(window);
-
+//		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//	
+//		skybox->draw(Camera::V);
+//	
+//		glUseProgram(dGeometryShader);
+//	
+//		Camera::enable(dGeometryShader);
+//	
+//		Light::enable(dGeometryShader);
+//	
+//		Geode::scene->draw(mat4(1.0f), dGeometryShader);
+//	
+//		glfwSwapBuffers(window);
+//		return;
 
 	// 1. Geometry Pass: render scene's geometry/color data into gbuffer
 	glBindFramebuffer(GL_FRAMEBUFFER, gBuffer);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	skybox->draw(Camera::V);
+	
 
 	glUseProgram(dGeometryShader);
 	Camera::enable(dGeometryShader);
@@ -141,18 +139,25 @@ void PrimaryWindow::display_callback()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 
-	//glfwSwapBuffers(window);
-
+	glfwSwapBuffers(window);
 	/*TODO: GeometryShader is generating right values, but saving to texture and then reading in LightingBuffer does not work*/
 
 	// 2. Lighting Pass: calculate lighting by iterating over a screen filled quad pixel-by-pixel using the gbuffer's content.
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	//skybox->draw(Camera::V);
+	skybox->draw(Camera::V);
 
 	glUseProgram(dLightingShader);
 	Camera::enable(dLightingShader); //Must be called after correct use program
 	Light::enable(dLightingShader);
+
+
+	glUniform1i(glGetUniformLocation(dLightingShader, "gPosition"), 0);
+	glUniform1i(glGetUniformLocation(dLightingShader, "gNormal"), 1);
+	glUniform1i(glGetUniformLocation(dLightingShader, "gAlbedoSpec"), 2);
+
+
+
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, gPosition);
 	glActiveTexture(GL_TEXTURE1);

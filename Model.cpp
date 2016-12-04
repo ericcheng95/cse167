@@ -166,10 +166,10 @@ Model::~Model()
 
 void Model::draw()
 {
-	if (texture != nullptr)
-	{
-		texture->bind();
-	}
+//	if (texture != nullptr)
+//	{
+//		texture->bind();
+//	}
 	glBindVertexArray(VAO);
 	glDrawElements(g_DrawMode, count, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
