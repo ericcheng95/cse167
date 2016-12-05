@@ -25,7 +25,9 @@
     <None Include="dGeometry.frag" />
     <None Include="dGeometry.vert" />
     <None Include="dLighting.frag" />
-    <None Include="dLighting.vert" />
+    <None Include="dSSAOBlurShader.frag" />
+    <None Include="dSSAOShader.frag" />
+    <None Include="dSSAOShader.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\main.cpp">

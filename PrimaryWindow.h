@@ -7,6 +7,18 @@
 #include "Cylinder.h"
 #include "Pyramid.h"
 #include "skybox.h"
+#define GLFW_INCLUDE_GLEXT
+#ifdef __APPLE__
+#define GLFW_INCLUDE_GLCOREARB
+#else
+#include <GL/glew.h>
+#endif
+#include <GLFW/glfw3.h>
+#include "shader.h"
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <random>
+
 
 class PrimaryWindow
 {
@@ -14,12 +26,17 @@ public:
 	static GLFWwindow* window;
 	static int width;
 	static int height;
-	static unsigned int shader, dGeometryShader, dLightingShader;
+	static unsigned int shader, dGeometryShader, dLightingShader, dSSAOShader, dSSAOBlurShader;
 	static unsigned int selectionShader;
 
 	static GLuint gBuffer;
-	static GLuint gPosition, gNormal, gAlbedoSpec;
+	static GLuint gPositionDepth, gNormal, gAlbedo;
 
+
+	static GLuint ssaoFBO, ssaoBlurFBO, noiseTexture;
+	static default_random_engine generator;
+	static vector<glm::vec3> ssaoKernel;
+	static vector<glm::vec3> ssaoNoise;
 
 	static bool enableCulling;
 

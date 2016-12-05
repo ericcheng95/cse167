@@ -2,9 +2,10 @@
 out vec4 FragColor;
 in vec2 TexCoords;
 
-uniform sampler2D gPosition;
+uniform sampler2D gPositionDepth;
 uniform sampler2D gNormal;
-uniform sampler2D gAlbedoSpec;
+uniform sampler2D gAlbedo;
+uniform sampler2D ssao;
 
 uniform vec3 cameraPos;
 
@@ -34,10 +35,12 @@ void main()
 
 
     // Retrieve data from gbuffer
-    vec3 FragPos = texture(gPosition, TexCoords).rgb;
+    vec3 FragPos = texture(gPositionDepth, TexCoords).rgb;
     vec3 Normal = texture(gNormal, TexCoords).rgb;
-    vec3 Diffuse = texture(gAlbedoSpec, TexCoords).rgb;
-    float Specular = texture(gAlbedoSpec, TexCoords).a;
+    vec3 Diffuse = texture(gAlbedo, TexCoords).rgb;
+    float Specular = texture(gAlbedo, TexCoords).a;
+	float Depth = texture(gPositionDepth, TexCoords).a;
+    float AmbientOcclusion = texture(ssao, TexCoords).r;
 
 	if (Normal.x == 0 && Normal.y == 0 && Normal.z == 0){
 		FragColor = vec4(0,0,0,0);
